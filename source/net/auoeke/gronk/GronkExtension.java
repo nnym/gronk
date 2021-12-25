@@ -17,7 +17,7 @@ public class GronkExtension {
     }
 
     public void javaVersion(Object version) {
-        Util.extension(this.project, JavaPluginExtension.class, extension -> {
+        Util.whenExtensionPresent(this.project, JavaPluginExtension.class, extension -> {
             extension.setSourceCompatibility(version);
             extension.setTargetCompatibility(version);
         });

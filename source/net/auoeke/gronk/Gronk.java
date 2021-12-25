@@ -23,7 +23,7 @@ public class Gronk implements Plugin<Project> {
         var extension = project.getExtensions().create("gronk", GronkExtension.class, project);
 
         // Set up source sets.
-        Util.extensionAfterEvaluation(project, JavaPluginExtension.class, java -> {
+        Util.whenExtensionPresent(project, JavaPluginExtension.class, java -> {
             var sets = java.getSourceSets();
             var main = sets.getByName("main");
             main.getJava().srcDir("source");
@@ -49,20 +49,23 @@ public class Gronk implements Plugin<Project> {
             dependency.version(constraint -> constraint.prefer(extension.fallbackVersion))
         ));
 
-        Util.extensionAfterEvaluation(project, PublishingExtension.class, publish -> publish.publications(publications -> {
-            if (project.getPluginManager().hasPlugin("maven-publish")) {
-                // Ensure that a publication exists if the Maven publishing plugin is applied and the group is not empty.
-                if (publications.isEmpty() && !project.getGroup().toString().isEmpty()) {
-                    publications.register("maven", MavenPublication.class, publication -> {
-                        configure(project.getComponents(), "java", publication::from);
-                    });
-                }
+        Util.whenExtensionPresent(project, PublishingExtension.class, publish -> {
+            // Generate a source JAR if a publishing plugin and the Java plugin are present.
+            Util.javaExtension(project, JavaPluginExtension::withSourcesJar);
 
-                // Expose only resolved versions of dependencies in publications instead of the declared versions.
-                publications.withType(MavenPublication.class).all(publication ->
-                    publication.versionMapping(strategy -> strategy.allVariants(VariantVersionMappingStrategy::fromResolutionResult))
-                );
-            }
-        }));
+            publish.publications(publications -> {
+                if (project.getPluginManager().hasPlugin("maven-publish")) {
+                    // Ensure that a publication exists if the Maven publishing plugin is applied and the group is not empty.
+                    if (publications.isEmpty() && !project.getGroup().toString().isEmpty()) {
+                        publications.register("maven", MavenPublication.class, publication -> configure(project.getComponents(), "java", publication::from));
+                    }
+
+                    // Expose only resolved versions of dependencies in publications instead of the declared versions.
+                    publications.withType(MavenPublication.class).all(publication ->
+                        publication.versionMapping(strategy -> strategy.allVariants(VariantVersionMappingStrategy::fromResolutionResult))
+                    );
+                }
+            });
+        });
     }
 }
