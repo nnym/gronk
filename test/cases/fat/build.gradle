@@ -16,9 +16,11 @@ gronk {
 
 repositories {
     mavenCentral()
+    maven("https://storage.googleapis.com/devan-maven")
     maven("https://maven.auoeke.net")
     /* equivalent to
-    maven {url = "https://maven.auoeke.net"}
+    maven {url = name = "https://storage.googleapis.com/devan-maven"}
+    maven {url = name = "https://maven.auoeke.net"}
     */
 }
 
