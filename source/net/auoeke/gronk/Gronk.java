@@ -13,18 +13,17 @@ import org.gradle.api.publish.VariantVersionMappingStrategy;
 import org.gradle.api.publish.maven.MavenPublication;
 
 public class Gronk implements Plugin<Project> {
-    private static <T> void configure(Project project, Class<T> extension, Consumer<T> configure) {
-        project.afterEvaluate(p -> Optional.ofNullable(p.getExtensions().findByType(extension)).ifPresent(configure));
-    }
-
     private static <T> void configure(NamedDomainObjectCollection<T> collection, String name, Consumer<T> configure) {
         Optional.ofNullable(collection.findByName(name)).ifPresent(configure);
     }
 
     @Override
     public void apply(Project project) {
+        // Add the extension.
+        project.getExtensions().create("gronk", GronkExtension.class, project);
+
         // Set up source sets.
-        configure(project, JavaPluginExtension.class, extension -> {
+        Util.extensionAfterEvaluation(project, JavaPluginExtension.class, extension -> {
             var sets = extension.getSourceSets();
             var main = sets.getByName("main");
             main.getJava().srcDir("source");
@@ -50,7 +49,7 @@ public class Gronk implements Plugin<Project> {
             dependency.version(constraint -> constraint.prefer("latest.release"))
         ));
 
-        configure(project, PublishingExtension.class, publish -> publish.publications(publications -> {
+        Util.extensionAfterEvaluation(project, PublishingExtension.class, publish -> publish.publications(publications -> {
             if (project.getPluginManager().hasPlugin("maven-publish")) {
                 // Ensure that a publication exists if the Maven publishing plugin is applied and the group is not empty.
                 if (publications.isEmpty() && !project.getGroup().toString().isEmpty()) {

@@ -3,6 +3,10 @@ plugins {
     id("gronk")
 }
 
+gronk {
+    javaVersion(17)
+}
+
 repositories {
     mavenCentral()
     maven("https://maven.auoeke.net")

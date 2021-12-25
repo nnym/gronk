@@ -1,10 +1,18 @@
 plugins {
     id("java")
-    id("gronk")
     id("maven-publish")
+    id("gronk")
 }
 
 group("net.auoeke.gronk.test")
+
+gronk {
+    javaVersion(17)
+    /* equivalent to
+    sourceCompatibility = 17
+    targetCompatibility = 17
+    */
+}
 
 repositories {
     mavenCentral()
