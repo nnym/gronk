@@ -1,0 +1,8 @@
+plugins {
+    id("gronk")
+}
+
+repositories {
+    mavenCentral()
+    maven("https://maven.auoeke.net")
+}

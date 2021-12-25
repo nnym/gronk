@@ -1,0 +1,13 @@
+plugins {
+    id("java")
+    id("gronk")
+}
+
+repositories {
+    mavenCentral()
+    maven("https://maven.auoeke.net")
+}
+
+dependencies {
+    implementation("net.auoeke:reflect")
+}

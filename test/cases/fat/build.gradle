@@ -1,0 +1,42 @@
+plugins {
+    id("java")
+    id("gronk")
+    id("maven-publish")
+}
+
+group("net.auoeke.gronk.test")
+
+repositories {
+    mavenCentral()
+    maven("https://maven.auoeke.net")
+    /* equivalent to
+    maven {url = "https://maven.auoeke.net"}
+    */
+}
+
+dependencies {
+    implementation("net.auoeke:reflect")
+    /* equivalent to
+    implementation("net.auoeke:reflect") {
+        version {
+            prefer("latest.release")
+        }
+    }
+    */
+}
+
+/* implicit
+publishing {
+    publications {
+        maven(MavenRepository) {
+            from(components.java)
+
+            versionMapping {
+                allVariants {
+                    fromResolutionResult()
+                }
+            }
+        }
+    }
+}
+*/
