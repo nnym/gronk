@@ -51,7 +51,7 @@ publishing {
 
             credentials {
                 username = System.properties["maven.username"]
-                username = System.properties["maven.password"]
+                password = System.properties["maven.password"]
             }
         }
     }
