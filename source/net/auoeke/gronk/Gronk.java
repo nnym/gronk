@@ -20,11 +20,11 @@ public class Gronk implements Plugin<Project> {
     @Override
     public void apply(Project project) {
         // Add the extension.
-        project.getExtensions().create("gronk", GronkExtension.class, project);
+        var extension = project.getExtensions().create("gronk", GronkExtension.class, project);
 
         // Set up source sets.
-        Util.extensionAfterEvaluation(project, JavaPluginExtension.class, extension -> {
-            var sets = extension.getSourceSets();
+        Util.extensionAfterEvaluation(project, JavaPluginExtension.class, java -> {
+            var sets = java.getSourceSets();
             var main = sets.getByName("main");
             main.getJava().srcDir("source");
             main.resources(resources -> resources.srcDir("resources"));
@@ -44,9 +44,9 @@ public class Gronk implements Plugin<Project> {
         var repositories = (ExtensionAware) project.getRepositories();
         repositories.getExtensions().create("maven", MavenRepositoryExtension.class, project, repositories);
 
-        // Fall back to latest.release for dependencies without required versions.
+        // Use the fallback (latest) version for dependencies without required versions.
         project.getConfigurations().all(configuration -> configuration.getDependencies().withType(ExternalDependency.class).all(dependency ->
-            dependency.version(constraint -> constraint.prefer("latest.release"))
+            dependency.version(constraint -> constraint.prefer(extension.fallbackVersion))
         ));
 
         Util.extensionAfterEvaluation(project, PublishingExtension.class, publish -> publish.publications(publications -> {
