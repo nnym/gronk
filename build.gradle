@@ -1,7 +1,7 @@
 plugins {
     id("java-gradle-plugin")
     id("maven-publish")
-    id("gronk").version("0.4.0")
+    id("gronk").version("latest.release")
 }
 
 group("net.auoeke")
@@ -50,9 +50,7 @@ test {
 
 publishing {
     repositories {
-        maven {
-            url = "https://maven.auoeke.net"
-
+        maven("maven.auoeke.net") {
             credentials {
                 username = System.properties["maven.username"]
                 password = System.properties["maven.password"]
