@@ -2,6 +2,7 @@ package net.auoeke.gronk;
 
 import groovy.lang.Closure;
 import java.util.Optional;
+import java.util.concurrent.Callable;
 import java.util.function.Consumer;
 import org.gradle.api.Action;
 import org.gradle.api.Project;
@@ -42,8 +43,16 @@ public class Util {
         project.getPluginManager().withPlugin(name, plugin -> action.run());
     }
 
-    public static <T> Closure closure(Object owner, Object thisObject, Action<T> action) {
-        return new Closure(owner, thisObject) {
+    public static <T> Optional<T> tryCatch(Callable<T> callable) {
+        try {
+            return Optional.of(callable.call());
+        } catch (Throwable throwable) {
+            return Optional.empty();
+        }
+    }
+
+    public static <T> Closure closure(Action<T> action) {
+        return new Closure(action) {
             public void doCall(T object) {
                 action.execute(object);
             }

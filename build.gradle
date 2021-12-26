@@ -1,26 +1,21 @@
 plugins {
     id("java-gradle-plugin")
     id("maven-publish")
+    id("gronk").version("latest.release")
 }
 
 group("net.auoeke")
-version("0.4.0")
+version("0.5.0")
 
 sourceSets {
     main {
         java {
-            srcDir("source")
             exclude("**/*.gradle")
         }
 
         resources {
-            srcDir("source")
             include("**/*.gradle")
         }
-    }
-
-    test {
-        java.srcDir("test/source")
     }
 }
 
@@ -36,18 +31,6 @@ dependencies {
     testImplementation("org.junit.jupiter:junit-jupiter-params")
     testCompileOnly("org.jetbrains:annotations:latest.integration")
     testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine")
-
-    configurations.all {
-        dependencies.withType(ExternalDependency).all {
-            version {
-                prefer("+")
-            }
-        }
-    }
-}
-
-java {
-    withSourcesJar()
 }
 
 gradlePlugin {
@@ -65,14 +48,6 @@ test {
 }
 
 publishing {
-    publications.all {
-        versionMapping {
-            allVariants {
-                fromResolutionResult()
-            }
-        }
-    }
-
     repositories {
         maven {
             url = "https://maven.auoeke.net"

@@ -36,8 +36,27 @@ dependencies {
     */
 }
 
-/* implicit
 publishing {
+    repositories {
+        maven("maven.auoeke.net") {
+            credentials {
+                username = System.properties["maven.username"]
+                password = System.properties["maven.password"]
+            }
+        }
+        /* equivalent to
+        maven {
+            url = "https://maven.auoeke.net"
+
+            credentials {
+                username = System.properties["maven.username"]
+                password = System.properties["maven.password"]
+            }
+        }
+        */
+    }
+
+/* implicit
     publications {
         maven(MavenRepository) {
             from(components.java)
@@ -49,5 +68,5 @@ publishing {
             }
         }
     }
-}
 */
+}

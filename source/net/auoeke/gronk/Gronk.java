@@ -6,7 +6,6 @@ import org.gradle.api.NamedDomainObjectCollection;
 import org.gradle.api.Plugin;
 import org.gradle.api.Project;
 import org.gradle.api.artifacts.ExternalDependency;
-import org.gradle.api.plugins.ExtensionAware;
 import org.gradle.api.plugins.JavaPluginExtension;
 import org.gradle.api.publish.PublishingExtension;
 import org.gradle.api.publish.VariantVersionMappingStrategy;
@@ -38,8 +37,7 @@ public class Gronk implements Plugin<Project> {
         });
 
         // Add the Maven repository extension.
-        var repositories = (ExtensionAware) project.getRepositories();
-        repositories.getExtensions().create("maven", MavenRepositoryExtension.class, project, repositories);
+        MavenRepositoryExtension.inject(project, project.getRepositories());
 
         // Use the fallback (latest) version for dependencies without required versions.
         project.getConfigurations().all(configuration -> configuration.getDependencies().withType(ExternalDependency.class, dependency -> {
@@ -51,6 +49,9 @@ public class Gronk implements Plugin<Project> {
         Util.whenExtensionPresent(project, PublishingExtension.class, publish -> {
             // Generate a source JAR if a publishing plugin and the Java plugin are present.
             Util.javaExtension(project, JavaPluginExtension::withSourcesJar);
+
+            // Add the Maven repository extension.
+            MavenRepositoryExtension.inject(project, publish.getRepositories());
 
             project.afterEvaluate(p -> p.getPluginManager().withPlugin("maven-publish", plugin -> publish.publications(publications -> {
                 // Ensure that a publication exists if the Maven publishing plugin is applied and the group is not empty.
