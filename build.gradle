@@ -14,7 +14,7 @@ sourceSets {
         }
 
         resources {
-            srcDir("sources")
+            srcDir("source")
             include("**/*.gradle")
         }
     }

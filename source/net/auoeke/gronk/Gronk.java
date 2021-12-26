@@ -27,10 +27,7 @@ public class Gronk implements Plugin<Project> {
             var main = sets.getByName("main");
             main.getJava().srcDir("source");
             main.resources(resources -> resources.srcDir("resources"));
-
-            var test = sets.getByName("test");
-            var testSource = project.file("test/source").exists() ? "test/source" : "test";
-            test.getJava().srcDir(testSource);
+            sets.getByName("test").getJava().srcDir(project.file("test/source").exists() ? "test/source" : "test");
 
             // Configure Kotlin from a Gradle script because its classes can't be loaded here for some reason.
             project.apply(configuration -> configuration.from(Gronk.class.getResource("kotlin.gradle")));
