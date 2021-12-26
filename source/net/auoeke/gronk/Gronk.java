@@ -1,5 +1,6 @@
 package net.auoeke.gronk;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.function.Consumer;
 import org.gradle.api.NamedDomainObjectCollection;
@@ -27,7 +28,8 @@ public class Gronk implements Plugin<Project> {
             var main = sets.getByName("main");
             main.getJava().srcDir("source");
             main.resources(resources -> resources.srcDir("resources"));
-            sets.getByName("test").getJava().srcDir(project.file("test/source").exists() ? "test/source" : "test");
+            var test = sets.getByName("test").getJava();
+            test.setSrcDirs(List.of(project.file("test/source").exists() ? "test/source" : "test"));
 
             // Configure Kotlin from a Gradle script because its classes can't be loaded here for some reason.
             project.apply(configuration -> configuration.from(Gronk.class.getResource("kotlin.gradle")));
