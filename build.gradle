@@ -1,7 +1,7 @@
 plugins {
     id("java-gradle-plugin")
     id("maven-publish")
-    id("gronk").version("latest.release")
+    id("gronk").version("0.4.0")
 }
 
 group("net.auoeke")
@@ -14,6 +14,7 @@ sourceSets {
         }
 
         resources {
+            srcDir("sources")
             include("**/*.gradle")
         }
     }
