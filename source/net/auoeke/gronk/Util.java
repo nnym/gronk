@@ -25,7 +25,21 @@ public class Util {
     }
 
     public static void javaExtension(Project project, Consumer<JavaPluginExtension> configure) {
-        extension(project, JavaPluginExtension.class, configure);
+        whenExtensionPresent(project, JavaPluginExtension.class, configure);
+    }
+
+    public static boolean plugin(Project project, String name, Runnable action) {
+        if (project.getPluginManager().hasPlugin(name)) {
+            action.run();
+
+            return true;
+        }
+
+        return false;
+    }
+
+    public static void whenPluginPresent(Project project, String name, Runnable action) {
+        project.getPluginManager().withPlugin(name, plugin -> action.run());
     }
 
     public static <T> Closure closure(Object owner, Object thisObject, Action<T> action) {

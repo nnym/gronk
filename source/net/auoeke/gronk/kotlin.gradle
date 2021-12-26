@@ -1,0 +1,19 @@
+pluginManager.withPlugin("org.jetbrains.kotlin.jvm") {
+    // Set up Kotlin source sets.
+    sourceSets {
+        main {
+            kotlin.srcDir("source")
+        }
+
+        test {
+            kotlin.srcDir(file("test/source").exists() ? "test/source" : "test")
+        }
+    }
+
+    // Set the Kotlin compilation tasks' JVM target version to that of the Java target version.
+    afterEvaluate {
+        tasks.withType(compileKotlin.class) {
+            kotlinOptions.jvmTarget = targetCompatibility.toString()
+        }
+    }
+}

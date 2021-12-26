@@ -15,7 +15,7 @@ class GronkTest {
             .withProjectDir(testCase(testCase).toFile())
             .withDebug(true)
             .withPluginClasspath()
-            .withArguments(Stream.concat(Stream.of("--stacktrace"), Stream.of(arguments)).toList())
+            .withArguments(Stream.concat(Stream.of("-S"), Stream.of(arguments)).toList())
             .forwardOutput();
     }
 
@@ -24,12 +24,12 @@ class GronkTest {
         runner("fat", "clean", "build", "publishToMavenLocal").build();
     }
 
-    @Test
+    // @Test
     void noPublish() {
         runner("no-publish", "clean", "build").build();
     }
 
-    @Test
+    // @Test
     void noJava() {
         runner("no-java", "build").build();
     }

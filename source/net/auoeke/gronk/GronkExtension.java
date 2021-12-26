@@ -1,7 +1,6 @@
 package net.auoeke.gronk;
 
 import org.gradle.api.Project;
-import org.gradle.api.plugins.JavaPluginExtension;
 
 public class GronkExtension {
     public String fallbackVersion = "+";
@@ -17,7 +16,7 @@ public class GronkExtension {
     }
 
     public void javaVersion(Object version) {
-        Util.whenExtensionPresent(this.project, JavaPluginExtension.class, extension -> {
+        Util.javaExtension(this.project, extension -> {
             extension.setSourceCompatibility(version);
             extension.setTargetCompatibility(version);
         });

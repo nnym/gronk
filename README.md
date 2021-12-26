@@ -1,5 +1,6 @@
 This Gradle project plugin
 - reduces source tree depth by moving source roots to the project's directory;
+- sets Kotlin compilation tasks' JVM target version to `JavaPluginExtension#getTargetCompatibility`;
 - simplifies adding Maven repositories;
 - sets `+` as the preferred version for dependencies that do not have a required version specified;
 - applies `JavaPluginExtension#withSourcesJar` when the Java plugin is present;
