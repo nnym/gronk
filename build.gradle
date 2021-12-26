@@ -4,7 +4,7 @@ plugins {
 }
 
 group("net.auoeke")
-version("0.3.0")
+version("0.3.1")
 
 sourceSets {
     main {

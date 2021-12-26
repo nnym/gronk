@@ -42,9 +42,11 @@ public class Gronk implements Plugin<Project> {
         repositories.getExtensions().create("maven", MavenRepositoryExtension.class, project, repositories);
 
         // Use the fallback (latest) version for dependencies without required versions.
-        project.getConfigurations().all(configuration -> configuration.getDependencies().withType(ExternalDependency.class).all(dependency ->
-            dependency.version(constraint -> constraint.prefer(extension.fallbackVersion))
-        ));
+        project.getConfigurations().all(configuration -> configuration.getDependencies().withType(ExternalDependency.class, dependency -> {
+            if (dependency.getVersion() == null || dependency.getVersion().isEmpty()) {
+                dependency.version(constraint -> constraint.prefer(extension.fallbackVersion));
+            }
+        }));
 
         Util.whenExtensionPresent(project, PublishingExtension.class, publish -> {
             // Generate a source JAR if a publishing plugin and the Java plugin are present.
