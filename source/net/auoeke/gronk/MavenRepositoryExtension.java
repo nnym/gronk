@@ -1,6 +1,8 @@
 package net.auoeke.gronk;
 
 import groovy.lang.Closure;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.List;
 import org.gradle.api.Action;
 import org.gradle.api.Project;
@@ -19,8 +21,18 @@ public class MavenRepositoryExtension extends Closure<Void> {
 
     public MavenArtifactRepository doCall(Object url, Action<MavenArtifactRepository> configure) {
         return this.repositories().maven(repository -> {
-            repository.setUrl(url);
-            repository.setName(url.toString());
+            var url1 = url;
+
+            if (url1 instanceof String string) {
+                try {
+                    url1 = new URL(string);
+                } catch (MalformedURLException __) {
+                    url1 = "https://" + string;
+                }
+            }
+
+            repository.setUrl(url1);
+            repository.setName(url1.toString());
             this.project.configure(List.of(repository), configure);
 
             if (repository.getName().equals("maven")) {

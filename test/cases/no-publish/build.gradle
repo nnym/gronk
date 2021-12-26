@@ -9,7 +9,7 @@ gronk {
 
 repositories {
     mavenCentral()
-    maven("https://maven.auoeke.net")
+    maven("maven.auoeke.net")
 }
 
 dependencies {
