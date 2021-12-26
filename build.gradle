@@ -29,8 +29,6 @@ repositories {
 }
 
 dependencies {
-    compileOnlyApi("org.jetbrains.kotlin:kotlin-gradle-plugin")
-
     testImplementation("org.codehaus.groovy:groovy-nio")
     testImplementation("org.ow2.asm:asm")
     testImplementation("org.ow2.asm:asm-tree")
