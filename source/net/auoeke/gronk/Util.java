@@ -6,6 +6,7 @@ import java.util.concurrent.Callable;
 import java.util.function.Consumer;
 import org.gradle.api.Action;
 import org.gradle.api.Project;
+import org.gradle.api.plugins.ExtensionAware;
 import org.gradle.api.plugins.JavaPluginExtension;
 
 public class Util {
@@ -41,6 +42,14 @@ public class Util {
 
     public static void whenPluginPresent(Project project, String name, Runnable action) {
         project.getPluginManager().withPlugin(name, plugin -> action.run());
+    }
+
+    public static <T> T tryAddExtension(ExtensionAware object, String name, T extension) {
+        if (object.getExtensions().findByName(name) == null) {
+            object.getExtensions().add(name, extension);
+        }
+
+        return extension;
     }
 
     public static <T> Optional<T> tryCatch(Callable<T> callable) {

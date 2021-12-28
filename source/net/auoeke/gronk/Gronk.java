@@ -22,8 +22,11 @@ public class Gronk implements Plugin<Project> {
         // Add the extension.
         var extension = project.getExtensions().create("gronk", GronkExtension.class, project);
 
-        // Set up source sets.
         Util.javaExtension(project, java -> {
+            // Add javaVersion to the project.
+            Util.tryAddExtension(project, "javaVersion", Util.closure(extension::javaVersion));
+
+            // Set up source sets.
             var sets = java.getSourceSets();
             var main = sets.getByName("main");
             main.getJava().srcDir("source");
