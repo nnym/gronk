@@ -12,8 +12,9 @@ while exposing to dependent projects only the versions of dependencies that are 
 See the test case [`fat`](./test/cases/fat/build.gradle).
 
 ### license
-I hereby grant you a worldwide non-exclusive perpetual irrevocable royalty-free license
-to publicly use, perform, reproduce, display, distribute and prepare derivative works of this software
+For the purpose of this license, "this software" refers to the files wherewith this license text is shipped.
+
+Indeed it is I who hereby grants every receiver of a verbatim copy of this software a worldwide non-exclusive perpetual irrevocable royalty-free license
+to publicly use, perform, reproduce, display, distribute, sublicense and prepare derivative works of this software
 as long as you don't break the law and as long as you don't claim it as your own.
-This license is propagated to every receiver of verbatim copies of this software.
-Permission to relicense derivate works is granted.
+Derivate works may be relicensed under different terms.
