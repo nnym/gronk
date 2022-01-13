@@ -14,14 +14,3 @@ instead of the declared versions in order to allow myself to use dynamic version
 while exposing to dependent projects only the versions of dependencies that are known to work.
 
 See the test case [`fat`](test/cases/fat/build.gradle).
-
-### license :crayon:
-Every receiver of a copy of this software ("you") is granted a worldwide non-exclusive perpetual irrevocable royalty-free license
-to publicly use, perform, reproduce, display, distribute, sublicense and prepare derivative works of this software in any form subject to the following terms:
-- you provide upon request a copy of this license text to any person to whom you distribute this software; and
-- you do not claim this software as yours.
-
-You may relicense derivative and collective works under different terms.
-
-**This software is provided without any warranty including the implied warranties of merchantability, fitness for a particular purpose and noninfringement.
-In no event will any contributor or licensor be liable to you for any damages related to this software.**
