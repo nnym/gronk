@@ -1,20 +1,26 @@
 This Gradle project plugin
+- applies the latest version of the Project Lombok plugin;
 - reduces source tree depth by moving source roots to the project's directory;
-- sets Kotlin compilation tasks' JVM target version to `JavaPluginExtension#getTargetCompatibility`;
-- simplifies adding Maven repositories;
-- sets `+` as the preferred version for dependencies that do not have a required version specified;
-- applies `JavaPluginExtension#withSourcesJar` when the Java plugin is present;
+- sets Kotlin compilation tasks' JVM target version to `JavaPluginExtension::getTargetCompatibility`;
+- simplifies adding Maven repositories:
+  - allows URL to be specified as the first argument to `RepositoryHandler::maven`;
+  - allows leading `https://` to be omitted; and
+  - adds extension closures `username` and `password` mapped to `PasswordCredentials::set{Username,Password}`;
+- sets `+` as the preferred (fallback) version for dependencies that do not have a version specified;
+- applies `JavaPluginExtension::withSourcesJar` when the Java plugin is present;
 - adds a default Maven publication to an empty publication container from the Java software component; and
 - configures all Maven publications to contain the versions of dependencies that were resolved during the build
 instead of the declared versions in order to allow myself to use dynamic versions
 while exposing to dependent projects only the versions of dependencies that are known to work.
 
-See the test case [`fat`](./test/cases/fat/build.gradle).
+See the test case [`fat`](test/cases/fat/build.gradle).
 
-### license
-For the purpose of this license, "this software" refers to the files wherewith this license text is shipped.
+### license :crayon:
+Every receiver of a copy of this software ("you") is granted a worldwide non-exclusive perpetual irrevocable royalty-free license
+to publicly use, perform, reproduce, display, distribute, sublicense and prepare derivative works of this software subject to the following terms:
+- you provide upon request a copy of this license text to any recipient that receives a copy of this software from you; and
+- you don't claim it as yours.
+You may relicense derivative and collective works under different terms.
 
-Indeed it is I who hereby grants every receiver of a verbatim copy of this software ("you") a worldwide non-exclusive perpetual irrevocable royalty-free license
-to publicly use, perform, reproduce, display, distribute, sublicense and prepare derivative works of this software
-as long as you don't break the law and as long as you don't claim it as your own.
-Derivate works may be relicensed under different terms.
+**This software is provided without any warranty including the implied warranties of merchantability, fitness for a particular purpose and noninfringement.
+In no event will any contributor or licensor be liable to you for any damages related to this software.**
