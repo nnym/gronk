@@ -2,7 +2,6 @@ plugins {
     id("java-gradle-plugin")
     id("maven-publish")
     id("gronk").version("latest.release")
-    id("io.freefair.lombok").version("6.3.0")
 }
 
 group("net.auoeke")
@@ -57,10 +56,8 @@ test {
 publishing {
     repositories {
         maven("maven.auoeke.net") {
-            credentials {
-                username = System.properties["maven.username"]
-                password = System.properties["maven.password"]
-            }
+            username(System.properties["maven.username"])
+            password(System.properties["maven.password"])
         }
     }
 }
