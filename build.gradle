@@ -2,6 +2,7 @@ plugins {
     id("java-gradle-plugin")
     id("maven-publish")
     id("gronk").version("latest.release")
+    id("io.freefair.lombok").version("6.3.0")
 }
 
 group("net.auoeke")
@@ -24,9 +25,12 @@ sourceSets {
 
 repositories {
     mavenCentral()
+    gradlePluginPortal()
 }
 
 dependencies {
+    implementation("io.freefair.gradle:lombok-plugin")
+
     testImplementation("org.codehaus.groovy:groovy-nio")
     testImplementation("org.ow2.asm:asm")
     testImplementation("org.ow2.asm:asm-tree")

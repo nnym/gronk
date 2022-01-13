@@ -28,7 +28,7 @@ dependencies {
     /* equivalent to
     implementation("net.auoeke:reflect") {
         version {
-            prefer("latest.release")
+            prefer("+")
         }
     }
     */
@@ -37,10 +37,8 @@ dependencies {
 publishing {
     repositories {
         maven("maven.auoeke.net") {
-            credentials {
-                username = System.properties["maven.username"]
-                password = System.properties["maven.password"]
-            }
+            username(System.properties["maven.username"])
+            password(System.properties["maven.password"])
         }
         /* equivalent to
         maven {
@@ -56,9 +54,11 @@ publishing {
 
 /* implicit
     publications {
-        maven(MavenRepository) {
+        maven(MavenPublication) {
             from(components.java)
+        }
 
+        withType(MavenPublication) {
             versionMapping {
                 allVariants {
                     fromResolutionResult()

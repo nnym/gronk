@@ -3,6 +3,9 @@ package net.auoeke.gronk;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.Consumer;
+import io.freefair.gradle.plugins.lombok.LombokPlugin;
+import lombok.SneakyThrows;
+import lombok.val;
 import org.gradle.api.NamedDomainObjectCollection;
 import org.gradle.api.Plugin;
 import org.gradle.api.Project;
@@ -17,21 +20,23 @@ public class Gronk implements Plugin<Project> {
         Optional.ofNullable(collection.findByName(name)).ifPresent(configure);
     }
 
-    @Override
-    public void apply(Project project) {
-        // Add the extension.
-        var extension = project.getExtensions().create("gronk", GronkExtension.class, project);
+    @SneakyThrows
+    @Override public void apply(Project project) {
+        // Add the main extension.
+        val extension = project.getExtensions().create("gronk", GronkExtension.class, project);
 
         Util.javaExtension(project, java -> {
+            project.getPluginManager().apply(LombokPlugin.class);
+
             // Add javaVersion to the project.
             Util.tryAddExtension(project, "javaVersion", Util.closure(extension::javaVersion));
 
             // Set up source sets.
-            var sets = java.getSourceSets();
-            var main = sets.getByName("main");
+            val sets = java.getSourceSets();
+            val main = sets.getByName("main");
             main.getJava().srcDir("source");
             main.resources(resources -> resources.srcDir("resources"));
-            var test = sets.getByName("test").getJava();
+            val test = sets.getByName("test").getJava();
             test.setSrcDirs(List.of(project.file("test/source").exists() ? "test/source" : "test"));
 
             // Configure Kotlin from a Gradle script because its classes can't be loaded here for some reason.
@@ -61,7 +66,7 @@ public class Gronk implements Plugin<Project> {
                     publications.register("maven", MavenPublication.class, publication -> configure(project.getComponents(), "java", publication::from));
                 }
 
-                // Expose only resolved versions of dependencies in publications instead of the declared versions.
+                // Expose only resolved versions of dependencies instead of the declared versions in publications.
                 publications.withType(MavenPublication.class, publication -> publication.versionMapping(strategy -> strategy.allVariants(VariantVersionMappingStrategy::fromResolutionResult)));
             })));
         });
