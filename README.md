@@ -18,8 +18,8 @@ See the test case [`fat`](test/cases/fat/build.gradle).
 ### license :crayon:
 Every receiver of a copy of this software ("you") is granted a worldwide non-exclusive perpetual irrevocable royalty-free license
 to publicly use, perform, reproduce, display, distribute, sublicense and prepare derivative works of this software subject to the following terms:
-- you provide upon request a copy of this license text to any recipient that receives a copy of this software from you; and
-- you don't claim it as yours.
+- you provide upon request a copy of this license text to any person to whom you distribute this software; and
+- you do not claim this software as yours.
 
 You may relicense derivative and collective works under different terms.
 
