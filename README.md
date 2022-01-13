@@ -20,6 +20,7 @@ Every receiver of a copy of this software ("you") is granted a worldwide non-exc
 to publicly use, perform, reproduce, display, distribute, sublicense and prepare derivative works of this software subject to the following terms:
 - you provide upon request a copy of this license text to any recipient that receives a copy of this software from you; and
 - you don't claim it as yours.
+
 You may relicense derivative and collective works under different terms.
 
 **This software is provided without any warranty including the implied warranties of merchantability, fitness for a particular purpose and noninfringement.
