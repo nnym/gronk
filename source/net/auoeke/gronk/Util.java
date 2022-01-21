@@ -3,6 +3,7 @@ package net.auoeke.gronk;
 import java.util.Optional;
 import java.util.concurrent.Callable;
 import java.util.function.Consumer;
+import java.util.function.Function;
 import groovy.lang.Closure;
 import org.gradle.api.Action;
 import org.gradle.api.Project;
@@ -60,10 +61,20 @@ public class Util {
         }
     }
 
-    public static <T> Closure closure(Action<T> action) {
+    public static <T> Closure actionClosure(Action<T> action) {
         return new Closure(action) {
+            @SuppressWarnings("unused")
             public void doCall(T object) {
                 action.execute(object);
+            }
+        };
+    }
+
+    public static <T, R> Closure functionClosure(Function<T, R> function) {
+        return new Closure(function) {
+            @SuppressWarnings("unused")
+            public R doCall(T object) {
+                return function.apply(object);
             }
         };
     }
