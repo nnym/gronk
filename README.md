@@ -1,5 +1,6 @@
 This Gradle project plugin
 - applies the latest version of the Project Lombok plugin;
+- adds an extension `systemProperty` that does what it purports to do;
 - reduces source tree depth by moving source roots to the project's directory;
 - sets Kotlin compilation tasks' JVM target version to `JavaPluginExtension::getTargetCompatibility`;
 - simplifies adding Maven repositories:
