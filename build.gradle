@@ -23,7 +23,6 @@ sourceSets {
 }
 
 repositories {
-    mavenCentral()
     gradlePluginPortal()
 }
 
@@ -56,8 +55,8 @@ test {
 publishing {
     repositories {
         maven("maven.auoeke.net") {
-            username(System.properties["maven.username"])
-            password(System.properties["maven.password"])
+            username(systemProperty("maven.username"))
+            password(systemProperty("maven.password"))
         }
     }
 }
