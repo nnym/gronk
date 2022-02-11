@@ -2,7 +2,6 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Stream;
 import org.gradle.testkit.runner.GradleRunner;
 import org.junit.jupiter.api.Test;
 import org.junit.platform.commons.annotation.Testable;
@@ -37,13 +36,18 @@ class GronkTests {
         runner("fat", "clean", "build", "publish", "publishToMavenLocal").build();
     }
 
-    // @Test
+    @Test
     void noPublish() {
         runner("no-publish", "clean", "build").build();
     }
 
-    // @Test
+    @Test
     void noJava() {
         runner("no-java", "build").build();
+    }
+
+    // @Test
+    void dependencies() {
+        runner("fat", "dependencies").build();
     }
 }

@@ -4,9 +4,11 @@ import java.util.Optional;
 import java.util.concurrent.Callable;
 import java.util.function.Consumer;
 import java.util.function.Function;
+import java.util.regex.Pattern;
 import groovy.lang.Closure;
 import org.gradle.api.Action;
 import org.gradle.api.Project;
+import org.gradle.api.artifacts.repositories.MavenArtifactRepository;
 import org.gradle.api.plugins.ExtensionAware;
 import org.gradle.api.plugins.JavaPluginExtension;
 
@@ -51,6 +53,13 @@ public class Util {
         }
 
         return extension;
+    }
+
+    public static MavenArtifactRepository repository(Project project, String url) {
+        return project.getRepositories().withType(MavenArtifactRepository.class).stream()
+            .filter(repository -> repository.getUrl().toString().matches(Pattern.quote(url) + "/?"))
+            .findAny()
+            .orElse(project.getRepositories().maven(repository -> repository.setUrl(url)));
     }
 
     public static <T> Optional<T> tryCatch(Callable<T> callable) {

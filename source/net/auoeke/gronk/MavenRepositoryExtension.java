@@ -3,7 +3,6 @@ package net.auoeke.gronk;
 import java.io.File;
 import java.net.URL;
 import java.util.List;
-import lombok.val;
 import org.gradle.api.Action;
 import org.gradle.api.Project;
 import org.gradle.api.artifacts.dsl.RepositoryHandler;
@@ -26,7 +25,7 @@ public class MavenRepositoryExtension extends ClosureExtension<RepositoryHandler
 
     public MavenArtifactRepository doCall(Object url, Action<MavenArtifactRepository> configure) {
         return this.repositories().maven(repository -> {
-            val url1 = url instanceof String string ? Util.tryCatch(() -> this.project.file(string))
+            var url1 = url instanceof String string ? Util.tryCatch(() -> this.project.file(string))
                 .filter(File::exists)
                 .map(Object.class::cast)
                 .or(() -> Util.tryCatch(() -> new URL(string)))

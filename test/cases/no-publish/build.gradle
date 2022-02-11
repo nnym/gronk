@@ -3,8 +3,10 @@ plugins {
     id("gronk")
 }
 
+javaVersion(17)
+
 gronk {
-    javaVersion(17)
+    uncheck()
 }
 
 repositories {

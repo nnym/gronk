@@ -3,8 +3,6 @@ package net.auoeke.gronk;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.Consumer;
-import io.freefair.gradle.plugins.lombok.LombokPlugin;
-import lombok.val;
 import org.gradle.api.NamedDomainObjectCollection;
 import org.gradle.api.Plugin;
 import org.gradle.api.Project;
@@ -15,29 +13,22 @@ import org.gradle.api.publish.VariantVersionMappingStrategy;
 import org.gradle.api.publish.maven.MavenPublication;
 
 public class Gronk implements Plugin<Project> {
-    private static <T> void configure(NamedDomainObjectCollection<T> collection, String name, Consumer<T> configure) {
-        Optional.ofNullable(collection.findByName(name)).ifPresent(configure);
-    }
-
     @Override public void apply(Project project) {
         // Add the main extension.
-        val extension = project.getExtensions().create("gronk", GronkExtension.class, project);
+        var extension = project.getExtensions().create("gronk", GronkExtension.class, project);
 
         Util.tryAddExtension(project, "systemProperty", Util.<String, String>functionClosure(System::getProperty));
 
         Util.javaExtension(project, java -> {
-            project.getRepositories().mavenCentral();
-            project.getPluginManager().apply(LombokPlugin.class);
-
             // Add javaVersion to the project.
             Util.tryAddExtension(project, "javaVersion", Util.actionClosure(extension::javaVersion));
 
             // Set up source sets.
-            val sets = java.getSourceSets();
-            val main = sets.getByName("main");
+            var sets = java.getSourceSets();
+            var main = sets.getByName("main");
             main.getJava().srcDir("source");
             main.resources(resources -> resources.srcDir("resources"));
-            val test = sets.getByName("test").getJava();
+            var test = sets.getByName("test").getJava();
             test.setSrcDirs(List.of(project.file("test/source").exists() ? "test/source" : "test"));
 
             // Configure Kotlin from a Gradle script because its classes can't be loaded here for some reason.
@@ -71,5 +62,9 @@ public class Gronk implements Plugin<Project> {
                 publications.withType(MavenPublication.class, publication -> publication.versionMapping(strategy -> strategy.allVariants(VariantVersionMappingStrategy::fromResolutionResult)));
             })));
         });
+    }
+
+    private static <T> void configure(NamedDomainObjectCollection<T> collection, String name, Consumer<T> configure) {
+        Optional.ofNullable(collection.findByName(name)).ifPresent(configure);
     }
 }
