@@ -20,7 +20,7 @@ public class MavenRepositoryExtension extends ClosureExtension<RepositoryHandler
     }
 
     public static void inject(Project project, RepositoryHandler repositories) {
-        inject(repositories, "maven", MavenRepositoryExtension.class, project);
+        inject(repositories, "maven", project);
     }
 
     public MavenArtifactRepository doCall(Object url, Action<MavenArtifactRepository> configure) {

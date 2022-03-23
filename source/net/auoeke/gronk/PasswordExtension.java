@@ -8,7 +8,7 @@ public class PasswordExtension extends ClosureExtension<AuthenticationSupported,
     }
 
     public static void inject(AuthenticationSupported owner) {
-        inject(owner, "password", PasswordExtension.class);
+        inject(owner, "password");
     }
 
     public void doCall(Object password) {

@@ -8,7 +8,7 @@ public class UsernameExtension extends ClosureExtension<AuthenticationSupported,
     }
 
     public static void inject(AuthenticationSupported owner) {
-        inject(owner, "username", UsernameExtension.class);
+        inject(owner, "username");
     }
 
     public void doCall(Object username) {

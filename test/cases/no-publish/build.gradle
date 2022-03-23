@@ -11,9 +11,9 @@ gronk {
 
 repositories {
     mavenCentral()
-    maven("maven.auoeke.net")
 }
 
 dependencies {
     implementation("net.auoeke:reflect")
+    annotationProcessor("org.ow2.asm:asm-tree", "net.bytebuddy:byte-buddy-agent", "net.auoeke:reflect")
 }

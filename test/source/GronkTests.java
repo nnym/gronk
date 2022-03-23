@@ -48,6 +48,6 @@ class GronkTests {
 
     // @Test
     void dependencies() {
-        runner("fat", "dependencies").build();
+        runner("fat").build();
     }
 }

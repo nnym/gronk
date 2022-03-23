@@ -2,6 +2,7 @@ This Gradle project plugin
 - adds extension `gronk`
 - adds extension `javaVersion` that sets `sourceCompatibility` and `targetCompatibility`;
 - adds extension `systemProperty` that does what it purports to do;
+- adds Shadow JAR transformer `ManifestMerger`;
 - reduces source tree depth by moving source roots to the project's directory;
 - sets Kotlin compilation tasks' JVM target version to `JavaPluginExtension::getTargetCompatibility`;
 - simplifies adding Maven repositories:

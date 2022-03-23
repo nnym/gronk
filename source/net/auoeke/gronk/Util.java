@@ -7,10 +7,12 @@ import java.util.function.Function;
 import java.util.regex.Pattern;
 import groovy.lang.Closure;
 import org.gradle.api.Action;
+import org.gradle.api.Plugin;
 import org.gradle.api.Project;
 import org.gradle.api.artifacts.repositories.MavenArtifactRepository;
 import org.gradle.api.plugins.ExtensionAware;
 import org.gradle.api.plugins.JavaPluginExtension;
+import org.gradle.api.plugins.PluginManager;
 
 public class Util {
     public static <T> Optional<T> extension(Project project, Class<T> type) {
@@ -45,6 +47,10 @@ public class Util {
 
     public static void whenPluginPresent(Project project, String name, Runnable action) {
         project.getPluginManager().withPlugin(name, plugin -> action.run());
+    }
+
+    public static void whenPluginPresent(Project project, String name, Consumer<Plugin<Project>> action) {
+        project.getPluginManager().withPlugin(name, plugin -> action.accept(project.getPlugins().getPlugin(name)));
     }
 
     public static <T> T tryAddExtension(ExtensionAware object, String name, T extension) {

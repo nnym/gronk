@@ -3,6 +3,7 @@ plugins {
     id("maven-publish")
     id("org.jetbrains.kotlin.jvm").version("+")
     id("gronk")
+    id("com.github.johnrengelman.shadow").version("latest.release")
 }
 
 group("net.auoeke.gronk.test")
@@ -15,21 +16,20 @@ targetCompatibility = 17
 
 gronk {
     // Add net.auoeke:uncheck to every annotation processor configuration.
+    // Add repository https://maven.auoeke.net and central Maven repository.
     uncheck()
 }
 
 repositories {
-    mavenCentral()
     maven("storage.googleapis.com/devan-maven")
-    maven("maven.auoeke.net")
     /* equivalent to
     maven {url = name = "https://storage.googleapis.com/devan-maven"}
-    maven {url = name = "https://maven.auoeke.net"}
     */
 }
 
 dependencies {
     implementation("net.auoeke:reflect")
+    annotationProcessor("org.ow2.asm:asm-tree", "net.bytebuddy:byte-buddy-agent", "net.auoeke:reflect")
     /* equivalent to
     implementation("net.auoeke:reflect") {
         version {
@@ -37,6 +37,14 @@ dependencies {
         }
     }
     */
+}
+
+shadowJar {
+    transform(ManifestMerger) {
+        include {
+            it.manifest.mainAttributes.getValue("Agent-Class")?.startsWith("net.auoeke.reflect")
+        }
+    }
 }
 
 publishing {

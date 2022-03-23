@@ -27,6 +27,7 @@ public class GronkExtension {
         this.project.afterEvaluate(project -> Util.javaExtension(project, java -> {
             var names = new HashSet<>();
             project.getConfigurations().all(configuration -> names.add(configuration.getName()));
+            project.getRepositories().mavenCentral();
 
             java.getSourceSets().all(set -> {
                 if (names.contains(set.getAnnotationProcessorConfigurationName())) {

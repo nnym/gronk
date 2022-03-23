@@ -3,6 +3,7 @@ package net.auoeke.gronk;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.Consumer;
+import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar;
 import org.gradle.api.NamedDomainObjectCollection;
 import org.gradle.api.Plugin;
 import org.gradle.api.Project;
@@ -11,6 +12,8 @@ import org.gradle.api.plugins.JavaPluginExtension;
 import org.gradle.api.publish.PublishingExtension;
 import org.gradle.api.publish.VariantVersionMappingStrategy;
 import org.gradle.api.publish.maven.MavenPublication;
+import org.gradle.api.reflect.TypeOf;
+import org.gradle.internal.extensibility.DefaultConvention;
 
 public class Gronk implements Plugin<Project> {
     @Override public void apply(Project project) {
@@ -32,7 +35,11 @@ public class Gronk implements Plugin<Project> {
             test.setSrcDirs(List.of(project.file("test/source").exists() ? "test/source" : "test"));
 
             // Configure Kotlin from a Gradle script because its classes can't be loaded here for some reason.
-            project.apply(configuration -> configuration.from(Gronk.class.getResource("kotlin.gradle")));
+            run(project, "kotlin.gradle");
+
+            Util.whenPluginPresent(project, "com.github.johnrengelman.shadow", plugin -> {
+                project.getExtensions().add(Class.class, "ManifestMerger", ManifestMerger.class);
+            });
         });
 
         // Add the Maven repository extension.
@@ -66,5 +73,9 @@ public class Gronk implements Plugin<Project> {
 
     private static <T> void configure(NamedDomainObjectCollection<T> collection, String name, Consumer<T> configure) {
         Optional.ofNullable(collection.findByName(name)).ifPresent(configure);
+    }
+
+    private static void run(Project project, String script) {
+        project.apply(configuration -> configuration.from(Gronk.class.getResource(script)));
     }
 }
