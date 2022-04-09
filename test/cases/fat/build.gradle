@@ -40,10 +40,8 @@ dependencies {
 }
 
 shadowJar {
-    transform(ManifestMerger) {
-        include {
-            it.manifest.mainAttributes.getValue("Agent-Class")?.startsWith("net.auoeke.reflect")
-        }
+    mergeManifests {
+        include {manifest.mainAttributes.getValue("Agent-Class")?.startsWith("net.auoeke.reflect")}
     }
 }
 

@@ -3,6 +3,7 @@ package net.auoeke.gronk;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.Consumer;
+import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar;
 import org.gradle.api.NamedDomainObjectCollection;
 import org.gradle.api.Plugin;
 import org.gradle.api.Project;
@@ -35,6 +36,7 @@ public class Gronk implements Plugin<Project> {
             run(project, "kotlin.gradle");
 
             Util.whenPluginPresent(project, "com.github.johnrengelman.shadow", plugin -> {
+                project.getTasks().withType(ShadowJar.class, ManifestMergerExtension::inject);
                 project.getExtensions().add(Class.class, "ManifestMerger", ManifestMerger.class);
             });
         });

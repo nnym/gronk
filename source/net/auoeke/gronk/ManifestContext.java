@@ -8,14 +8,12 @@ import org.gradle.api.file.FileTreeElement;
 
 public final class ManifestContext {
     public final FileTreeElement file;
-    public final String path;
     public final Manifest manifest;
     public final List<Relocator> relocators;
     public final ShadowStats stats;
 
-    public ManifestContext(FileTreeElement file, String path, Manifest manifest, List<Relocator> relocators, ShadowStats stats) {
+    public ManifestContext(FileTreeElement file, Manifest manifest, List<Relocator> relocators, ShadowStats stats) {
         this.file = file;
-        this.path = path;
         this.manifest = manifest;
         this.relocators = relocators;
         this.stats = stats;
@@ -23,10 +21,6 @@ public final class ManifestContext {
 
     public FileTreeElement getFile() {
         return this.file;
-    }
-
-    public String getPath() {
-        return this.path;
     }
 
     public Manifest getManifest() {
