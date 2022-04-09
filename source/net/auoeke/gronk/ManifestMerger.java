@@ -57,8 +57,6 @@ public class ManifestMerger implements Transformer {
             } else {
                 manifestContext.manifest.getMainAttributes().forEach((key, value) -> this.manifest.getMainAttributes().putIfAbsent(key, value));
             }
-        } else {
-            this.manifest = null;
         }
     }
 
