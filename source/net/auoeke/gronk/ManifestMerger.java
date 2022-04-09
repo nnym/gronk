@@ -1,5 +1,6 @@
 package net.auoeke.gronk;
 
+import java.util.Map;
 import java.util.function.Predicate;
 import java.util.jar.JarFile;
 import java.util.jar.Manifest;
@@ -22,7 +23,7 @@ public class ManifestMerger implements Transformer {
 
     private boolean invoke(Closure<Boolean> predicate, ManifestContext context) {
         var result = new MutableBoolean();
-        ConfigureUtil.configureSelf(predicate.rightShift(Util.actionClosure(returnValue -> result.set(DefaultGroovyMethods.asBoolean(returnValue)))), context);
+        ConfigureUtil.configureSelf(predicate.rightShift(Util.actionClosure(returnValue -> result.set(DefaultGroovyMethods.asType(returnValue, boolean.class)))), context);
         return result.get();
     }
 
@@ -54,7 +55,7 @@ public class ManifestMerger implements Transformer {
             if (this.manifest == null) {
                 this.manifest = manifestContext.manifest;
             } else {
-                this.manifest.getMainAttributes().putAll(manifestContext.manifest.getMainAttributes());
+                manifestContext.manifest.getMainAttributes().forEach((key, value) -> this.manifest.getMainAttributes().putIfAbsent(key, value));
             }
         } else {
             this.manifest = null;

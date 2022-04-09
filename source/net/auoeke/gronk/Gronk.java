@@ -3,7 +3,6 @@ package net.auoeke.gronk;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.Consumer;
-import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar;
 import org.gradle.api.NamedDomainObjectCollection;
 import org.gradle.api.Plugin;
 import org.gradle.api.Project;
@@ -12,8 +11,6 @@ import org.gradle.api.plugins.JavaPluginExtension;
 import org.gradle.api.publish.PublishingExtension;
 import org.gradle.api.publish.VariantVersionMappingStrategy;
 import org.gradle.api.publish.maven.MavenPublication;
-import org.gradle.api.reflect.TypeOf;
-import org.gradle.internal.extensibility.DefaultConvention;
 
 public class Gronk implements Plugin<Project> {
     @Override public void apply(Project project) {
