@@ -12,6 +12,7 @@ import org.gradle.api.plugins.JavaPluginExtension;
 import org.gradle.api.publish.PublishingExtension;
 import org.gradle.api.publish.VariantVersionMappingStrategy;
 import org.gradle.api.publish.maven.MavenPublication;
+import org.gradle.plugins.signing.SigningExtension;
 
 public class Gronk implements Plugin<Project> {
     @Override public void apply(Project project) {
@@ -61,7 +62,9 @@ public class Gronk implements Plugin<Project> {
             project.afterEvaluate(p -> p.getPluginManager().withPlugin("maven-publish", plugin -> publish.publications(publications -> {
                 // Ensure that a publication exists if the Maven publishing plugin is applied and the group is not empty.
                 if (publications.isEmpty() && !project.getGroup().toString().isEmpty()) {
-                    publications.register("maven", MavenPublication.class, publication -> configure(project.getComponents(), "java", publication::from));
+                    var publication = publications.register("maven", MavenPublication.class, pub -> configure(project.getComponents(), "java", pub::from));
+                    // Sign the publication if the signing plugin is applied.
+                    Util.whenExtensionPresent(project, SigningExtension.class, signing -> signing.sign(publication.get()));
                 }
 
                 // Expose only resolved versions of dependencies instead of the declared versions in publications.
