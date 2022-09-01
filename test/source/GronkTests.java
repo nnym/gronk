@@ -2,6 +2,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Properties;
 import org.gradle.testkit.runner.GradleRunner;
 import org.junit.jupiter.api.Test;
 import org.junit.platform.commons.annotation.Testable;
@@ -16,11 +17,23 @@ class GronkTests {
         var args = new ArrayList<>(List.of(arguments));
         args.add("-S");
 
-        var init = Path.of(System.getProperty("user.home"), ".gradle", "init.gradle");
+        var home = Path.of(System.getProperty("user.home"), ".gradle");
+        var init = home.resolve("init.gradle");
 
         if (Files.exists(init)) {
             args.add("-I");
             args.add(init.toString());
+        }
+
+        var propertiesPath = home.resolve("gradle.properties");
+
+        if (Files.exists(propertiesPath)) {
+            var properties = new Properties();
+            properties.load(Files.newInputStream(propertiesPath));
+
+            properties.forEach((key, value) -> {
+                args.add("-P" + key + "=" + value);
+            });
         }
 
         return GradleRunner.create()
