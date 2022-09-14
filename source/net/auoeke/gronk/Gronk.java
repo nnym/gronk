@@ -20,6 +20,7 @@ public class Gronk implements Plugin<Project> {
         var extension = project.getExtensions().create("gronk", GronkExtension.class, project);
 
         Util.tryAddExtension(project, "systemProperty", Util.<String, String>functionClosure(System::getProperty));
+        Util.tryAddExtension(project, "url", Util.actionClosure(extension::url));
 
         Util.javaExtension(project, java -> {
             // Add javaVersion to the project.
@@ -67,8 +68,25 @@ public class Gronk implements Plugin<Project> {
                     Util.whenExtensionPresent(project, SigningExtension.class, signing -> signing.sign(publication.get()));
                 }
 
-                // Expose only resolved versions of dependencies instead of the declared versions in publications.
-                publications.withType(MavenPublication.class, publication -> publication.versionMapping(strategy -> strategy.allVariants(VariantVersionMappingStrategy::fromResolutionResult)));
+                publications.withType(MavenPublication.class, publication -> {
+                    // Expose only resolved versions of dependencies instead of the declared versions in publications.
+                    publication.versionMapping(strategy -> strategy.allVariants(VariantVersionMappingStrategy::fromResolutionResult));
+
+                    // Fill in some POM fields from the project.
+                    publication.pom(pom -> {
+                        if (!pom.getName().isPresent()) {
+                            pom.getName().set(project.getName());
+                        }
+
+                        if (!pom.getDescription().isPresent()) {
+                            pom.getDescription().set(project.getDescription());
+                        }
+
+                        if (!pom.getUrl().isPresent()) {
+                            pom.getUrl().set(extension.url);
+                        }
+                    });
+                });
             })));
         });
     }

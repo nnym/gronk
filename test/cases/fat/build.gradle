@@ -8,7 +8,8 @@ plugins {
 }
 
 group("net.auoeke.gronk.test")
-
+description("gronk fat test project")
+url("https://github.com/auoeke/gronk/tree/master/test/cases/fat")
 javaVersion(17)
 /* equivalent to
 sourceCompatibility = 17

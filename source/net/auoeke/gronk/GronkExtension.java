@@ -5,11 +5,16 @@ import org.gradle.api.Project;
 
 public class GronkExtension {
     public String fallbackVersion = "+";
+    public String url;
 
     private final Project project;
 
     public GronkExtension(Project project) {
         this.project = project;
+    }
+
+    public void url(String url) {
+        this.url = url;
     }
 
     public void fallbackVersion(String version) {

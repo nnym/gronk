@@ -3,6 +3,8 @@ import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.xpath.XPathFactory;
 import org.gradle.testkit.runner.GradleRunner;
 import org.junit.jupiter.api.Test;
 import org.junit.platform.commons.annotation.Testable;
@@ -47,6 +49,13 @@ class GronkTests {
     @Test
     void fat() {
         runner("fat", "clean", "build", "publish", "publishToMavenLocal").build();
+
+        var project = DocumentBuilderFactory.newDefaultInstance().newDocumentBuilder().parse(testCase("fat/build/publications/maven/pom-default.xml").toFile()).getFirstChild();
+        var xPath = XPathFactory.newDefaultInstance().newXPath();
+
+        assert xPath.evaluate("name", project).equals("fat");
+        assert xPath.evaluate("url", project).equals("https://github.com/auoeke/gronk/tree/master/test/cases/fat");
+        assert xPath.evaluate("description", project).equals("gronk fat test project");
     }
 
     @Test
