@@ -1,6 +1,6 @@
 plugins {
-    id("java-gradle-plugin")
-    id("maven-publish")
+    id("signing")
+    id("com.gradle.plugin-publish").version("latest.release")
     id("gronk").version("latest.release")
 }
 
@@ -42,11 +42,19 @@ dependencies {
     testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine")
 }
 
+pluginBundle {
+    website = "https://github.com/auoeke/gronk"
+    vcsUrl = "https://github.com/auoeke/gronk"
+    tags = ["condense"]
+}
+
 gradlePlugin {
     plugins {
         gronk {
-            id = "gronk"
+            id = "net.auoeke.gronk"
             implementationClass = "net.auoeke.gronk.Gronk"
+            displayName = name
+            description = "a Gradle plugin that simplifies build scripts by factoring out common elements"
         }
     }
 }
