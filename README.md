@@ -13,8 +13,6 @@ This Gradle project plugin
 - applies `JavaPluginExtension::withSourcesJar` when the Java plugin is present
 - adds a default (signed with signing plugin present) Maven publication to an empty publication container from the Java software component
 - adds extension `url` and fills in the POM fields `name`, `description` and `url` in all Maven publications from the project
-- configures all Maven publications to contain the versions of dependencies that were resolved during the build
-instead of the declared versions in order to allow myself to use dynamic versions
-while exposing to dependent projects only the versions of dependencies that are known to work.
+- configures all Maven publications to have their dependencies' dynamic versions resolved to concrete versions.
 
 See the test case [`fat`](test/cases/fat/build.gradle).
