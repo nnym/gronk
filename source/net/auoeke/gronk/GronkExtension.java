@@ -34,12 +34,9 @@ public class GronkExtension {
             project.getConfigurations().all(configuration -> names.add(configuration.getName()));
             project.getRepositories().mavenCentral();
 
-            java.getSourceSets().all(set -> {
-                if (names.contains(set.getAnnotationProcessorConfigurationName())) {
-                    Util.repository(project, "https://maven.auoeke.net");
-                    project.getDependencies().add(set.getAnnotationProcessorConfigurationName(), "net.auoeke:uncheck");
-                }
-            });
+            java.getSourceSets()
+                .matching(set -> names.contains(set.getAnnotationProcessorConfigurationName()))
+                .all(set -> project.getDependencies().add(set.getAnnotationProcessorConfigurationName(), "net.auoeke:uncheck"));
         }));
     }
 }
