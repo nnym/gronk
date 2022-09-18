@@ -1,5 +1,5 @@
 plugins {
-    id("gronk")
+    id("net.auoeke.gronk")
 }
 
 repositories {

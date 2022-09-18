@@ -3,7 +3,7 @@ plugins {
     id("maven-publish")
     id("signing")
     id("org.jetbrains.kotlin.jvm").version("+")
-    id("gronk")
+    id("net.auoeke.gronk")
     id("com.github.johnrengelman.shadow").version("latest.release")
 }
 

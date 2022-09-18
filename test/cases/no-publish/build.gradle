@@ -1,6 +1,6 @@
 plugins {
     id("java")
-    id("gronk")
+    id("net.auoeke.gronk")
 }
 
 javaVersion(17)

@@ -1,7 +1,7 @@
 plugins {
     id("signing")
     id("com.gradle.plugin-publish").version("latest.release")
-    id("gronk").version("latest.release")
+    id("net.auoeke.gronk").version("latest.release")
 }
 
 group("net.auoeke")
