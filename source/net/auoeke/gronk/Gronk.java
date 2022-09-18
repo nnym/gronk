@@ -1,5 +1,6 @@
 package net.auoeke.gronk;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.Consumer;
@@ -12,6 +13,7 @@ import org.gradle.api.plugins.JavaPluginExtension;
 import org.gradle.api.publish.PublishingExtension;
 import org.gradle.api.publish.VariantVersionMappingStrategy;
 import org.gradle.api.publish.maven.MavenPublication;
+import org.gradle.jvm.tasks.Jar;
 import org.gradle.plugins.signing.SigningExtension;
 
 public class Gronk implements Plugin<Project> {
@@ -33,6 +35,14 @@ public class Gronk implements Plugin<Project> {
             main.resources(resources -> resources.srcDir("resources"));
             var test = sets.getByName("test").getJava();
             test.setSrcDirs(List.of(project.file("test/source").exists() ? "test/source" : "test"));
+
+            var sourcesJarNames = new HashSet<String>();
+            java.getSourceSets().all(set -> sourcesJarNames.add(set.getSourcesJarTaskName()));
+
+            project.getTasks()
+                .withType(Jar.class)
+                .matching(task -> sourcesJarNames.contains(task.getName()))
+                .all(task -> task.eachFile(file -> file.setPath(file.getPath().replaceAll("\\.(?=.*/)", "/"))));
 
             // Configure Kotlin from a Gradle script because its classes can't be loaded here for some reason.
             run(project, "kotlin.gradle");
