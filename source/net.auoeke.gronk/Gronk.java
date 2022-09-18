@@ -44,9 +44,6 @@ public class Gronk implements Plugin<Project> {
                 .matching(task -> sourcesJarNames.contains(task.getName()))
                 .all(task -> task.eachFile(file -> file.setPath(file.getPath().replaceAll("\\.(?=.*/)", "/"))));
 
-            // Configure Kotlin from a Gradle script because its classes can't be loaded here for some reason.
-            run(project, "kotlin.gradle");
-
             Util.whenPluginPresent(project, "com.github.johnrengelman.shadow", plugin -> {
                 project.getTasks().withType(ShadowJar.class, ManifestMergerExtension::inject);
                 project.getExtensions().add(Class.class, "ManifestMerger", ManifestMerger.class);
@@ -106,9 +103,5 @@ public class Gronk implements Plugin<Project> {
 
     private static <T> void configure(NamedDomainObjectCollection<T> collection, String name, Consumer<T> configure) {
         Optional.ofNullable(collection.findByName(name)).ifPresent(configure);
-    }
-
-    private static void run(Project project, String script) {
-        project.apply(configuration -> configuration.from(Gronk.class.getResource(script)));
     }
 }

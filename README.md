@@ -4,7 +4,6 @@ This Gradle project plugin
 - adds extension `systemProperty` that does what it purports to do
 - adds Shadow JAR transformer `ManifestMerger`
 - reduces source tree depth by moving source roots to the project's directory
-- sets Kotlin compilation tasks' JVM target version to `JavaPluginExtension::getTargetCompatibility`
 - simplifies adding Maven repositories:
   - allows URL to be specified as the first argument to `RepositoryHandler::maven`
   - allows leading `https://` to be omitted

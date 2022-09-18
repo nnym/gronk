@@ -2,7 +2,6 @@ plugins {
     id("java")
     id("maven-publish")
     id("signing")
-    id("org.jetbrains.kotlin.jvm").version("+")
     id("net.auoeke.gronk")
     id("com.github.johnrengelman.shadow").version("latest.release")
 }
@@ -18,20 +17,19 @@ targetCompatibility = 17
 
 gronk {
     // Add net.auoeke:uncheck to every annotation processor configuration.
-    // Add repository https://maven.auoeke.net and central Maven repository.
+    // Add Central Repository.
     uncheck()
 }
 
 repositories {
     maven("storage.googleapis.com/devan-maven")
-    /* equivalent to
+    /* approximately equivalent to
     maven {url = name = "https://storage.googleapis.com/devan-maven"}
     */
 }
 
 dependencies {
     implementation("net.auoeke:reflect")
-    annotationProcessor("org.ow2.asm:asm-tree", "net.bytebuddy:byte-buddy-agent", "net.auoeke:reflect")
     /* equivalent to
     implementation("net.auoeke:reflect") {
         version {
@@ -50,16 +48,16 @@ shadowJar {
 publishing {
     repositories {
         maven("maven.auoeke.net") {
-            username(systemProperty("maven.username"))
-            password(systemProperty("maven.password"))
+            username(findProperty("maven.username"))
+            password(findProperty("maven.password"))
         }
         /* equivalent to
         maven {
             url = "https://maven.auoeke.net"
 
             credentials {
-                username = System.properties["maven.username"]
-                password = System.properties["maven.password"]
+                username = findProperty("maven.username")
+                password = findProperty("maven.password")
             }
         }
         */
@@ -77,6 +75,8 @@ publishing {
                     fromResolutionResult()
                 }
             }
+
+            signing.sign(it)
         }
     }
 */
