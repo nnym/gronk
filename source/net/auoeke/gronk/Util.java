@@ -12,7 +12,6 @@ import org.gradle.api.Project;
 import org.gradle.api.artifacts.repositories.MavenArtifactRepository;
 import org.gradle.api.plugins.ExtensionAware;
 import org.gradle.api.plugins.JavaPluginExtension;
-import org.gradle.api.plugins.PluginManager;
 
 public class Util {
     public static <T> Optional<T> extension(Project project, Class<T> type) {
