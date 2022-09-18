@@ -67,8 +67,8 @@ test {
 publishing {
     repositories {
         maven("maven.auoeke.net") {
-            username(systemProperty("maven.username"))
-            password(systemProperty("maven.password"))
+            username(findProperty("maven.username"))
+            password(findProperty("maven.password"))
         }
     }
 }
