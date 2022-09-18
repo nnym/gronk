@@ -63,14 +63,15 @@ public class Gronk implements Plugin<Project> {
             project.afterEvaluate(p -> p.getPluginManager().withPlugin("maven-publish", plugin -> publish.publications(publications -> {
                 // Ensure that a publication exists if the Maven publishing plugin is applied and the group is not empty.
                 if (publications.isEmpty() && !project.getGroup().toString().isEmpty()) {
-                    var publication = publications.register("maven", MavenPublication.class, pub -> configure(project.getComponents(), "java", pub::from));
-                    // Sign the publication if the signing plugin is applied.
-                    Util.whenExtensionPresent(project, SigningExtension.class, signing -> signing.sign(publication.get()));
+                    publications.register("maven", MavenPublication.class, pub -> configure(project.getComponents(), "java", pub::from));
                 }
 
                 publications.withType(MavenPublication.class, publication -> {
                     // Expose only resolved versions of dependencies instead of the declared versions in publications.
                     publication.versionMapping(strategy -> strategy.allVariants(VariantVersionMappingStrategy::fromResolutionResult));
+
+                    // Sign publications if the signing plugin is applied.
+                    Util.whenExtensionPresent(project, SigningExtension.class, signing -> signing.sign(publication));
 
                     // Fill in some POM fields from the project.
                     publication.pom(pom -> {

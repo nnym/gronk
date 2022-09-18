@@ -11,8 +11,9 @@ This Gradle project plugin
   - adds extension closures `username` and `password` mapped to `PasswordCredentials::set{Username,Password}`
 - sets `+` as the preferred (fallback) version for dependencies that do not have a version specified
 - applies `JavaPluginExtension::withSourcesJar` when the Java plugin is present
-- adds a default (signed with signing plugin present) Maven publication to an empty publication container from the Java software component
+- adds a default Maven publication to an empty publication container from the Java software component
 - adds extension `url` and fills in the POM fields `name`, `description` and `url` in all Maven publications from the project
-- configures all Maven publications to have their dependencies' dynamic versions resolved to concrete versions.
+- configures all Maven publications to have their dependencies' dynamic versions resolved to concrete versions
+- (when the signing plugin is applied) signs all publications.
 
 See the test case [`fat`](test/cases/fat/build.gradle).
