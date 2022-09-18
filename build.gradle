@@ -12,19 +12,6 @@ gronk {
     uncheck()
 }
 
-sourceSets {
-    main {
-        java {
-            exclude("**/*.gradle")
-        }
-
-        resources {
-            srcDir("source")
-            include("**/*.gradle")
-        }
-    }
-}
-
 repositories {
     gradlePluginPortal()
 }
@@ -33,11 +20,13 @@ dependencies {
     // Ideally would be compileOnly but then Gradle does not allow gronk to access Shadow's classes.
     implementation("gradle.plugin.com.github.johnrengelman:shadow")
 
-    testImplementation("org.codehaus.groovy:groovy-nio")
-    testImplementation("org.ow2.asm:asm")
-    testImplementation("org.ow2.asm:asm-tree")
-    testImplementation("org.junit.jupiter:junit-jupiter-api")
-    testImplementation("org.junit.jupiter:junit-jupiter-params")
+    testImplementation(
+        "org.codehaus.groovy:groovy-nio",
+        "org.ow2.asm:asm",
+        "org.ow2.asm:asm-tree",
+        "org.junit.jupiter:junit-jupiter-api",
+        "org.junit.jupiter:junit-jupiter-params"
+    )
     testCompileOnly("org.jetbrains:annotations")
     testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine")
 }
