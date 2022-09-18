@@ -70,8 +70,10 @@ public class Gronk implements Plugin<Project> {
                     // Expose only resolved versions of dependencies instead of the declared versions in publications.
                     publication.versionMapping(strategy -> strategy.allVariants(VariantVersionMappingStrategy::fromResolutionResult));
 
-                    // Sign publications if the signing plugin is applied.
-                    Util.whenExtensionPresent(project, SigningExtension.class, signing -> signing.sign(publication));
+                    if (!project.getPluginManager().hasPlugin("com.gradle.plugin-publish")) {
+                        // Sign publications if the signing plugin is applied.
+                        Util.whenExtensionPresent(project, SigningExtension.class, signing -> signing.sign(publication));
+                    }
 
                     // Fill in some POM fields from the project.
                     publication.pom(pom -> {
