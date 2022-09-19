@@ -52,12 +52,3 @@ test {
     dependsOn(cleanTest, pluginUnderTestMetadata)
     useJUnitPlatform()
 }
-
-publishing {
-    repositories {
-        maven("maven.auoeke.net") {
-            username(findProperty("maven.username"))
-            password(findProperty("maven.password"))
-        }
-    }
-}
