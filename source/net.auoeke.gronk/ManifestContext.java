@@ -1,6 +1,7 @@
 package net.auoeke.gronk;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.jar.Manifest;
 import com.github.jengelman.gradle.plugins.shadow.ShadowStats;
 import com.github.jengelman.gradle.plugins.shadow.relocation.Relocator;
@@ -33,5 +34,13 @@ public final class ManifestContext {
 
     public ShadowStats getStats() {
         return this.stats;
+    }
+
+    public boolean hasAttribute(String key, String value) {
+        return Objects.equals(this.manifest.getMainAttributes().getValue(key), value);
+    }
+
+    public boolean hasAttribute(String key) {
+        return this.manifest.getMainAttributes().getValue(key) != null;
     }
 }
