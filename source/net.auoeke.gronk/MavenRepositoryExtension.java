@@ -24,7 +24,7 @@ public class MavenRepositoryExtension extends ClosureExtension<RepositoryHandler
     }
 
     public MavenArtifactRepository doCall(Object url, Action<MavenArtifactRepository> configure) {
-        return this.repositories().maven(repository -> {
+        return url == null ? null : this.repositories().maven(repository -> {
             var url1 = url instanceof String string ? Util.tryCatch(() -> this.project.file(string))
                 .filter(File::exists)
                 .map(Object.class::cast)
