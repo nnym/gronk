@@ -32,7 +32,7 @@ public class MavenRepositoryExtension extends ClosureExtension<RepositoryHandler
                 .orElse("https://" + string) : url;
 
             repository.setUrl(url1);
-            repository.setName(url1.toString().replaceFirst("^.*?://", "").replace('/', '-'));
+            repository.setName(url1.toString().replaceAll("^.*?://|[\\W_]+", ""));
 
             if (repository instanceof ExtensionAware) {
                 UsernameExtension.inject(repository);
