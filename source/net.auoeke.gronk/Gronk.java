@@ -5,10 +5,12 @@ import java.util.List;
 import java.util.Optional;
 import java.util.function.Consumer;
 import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar;
+import net.auoeke.reflect.Accessor;
 import org.gradle.api.NamedDomainObjectCollection;
 import org.gradle.api.Plugin;
 import org.gradle.api.Project;
 import org.gradle.api.artifacts.ExternalDependency;
+import org.gradle.api.internal.project.DefaultProject;
 import org.gradle.api.plugins.JavaPluginExtension;
 import org.gradle.api.publish.PublishingExtension;
 import org.gradle.api.publish.VariantVersionMappingStrategy;
@@ -18,6 +20,8 @@ import org.gradle.plugins.signing.SigningExtension;
 
 public class Gronk implements Plugin<Project> {
     @Override public void apply(Project project) {
+	    Accessor.putReference(((DefaultProject) project).getFileResolver(), "fileNotationParser", new PathArrayNotationParser());
+
         // Add the main extension.
         var extension = project.getExtensions().create("gronk", GronkExtension.class, project);
 

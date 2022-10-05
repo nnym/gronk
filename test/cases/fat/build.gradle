@@ -45,13 +45,17 @@ shadowJar {
     }
 }
 
+if (file([buildDir, "gronkTest"]) != new File(buildDir, "gronkTest")) {
+	throw new AssertionError()
+}
+
 publishing {
     repositories {
-        maven("maven.auoeke.net") {
+        maven(findProperty("maven.repository")) {
             username(findProperty("maven.username"))
             password(findProperty("maven.password"))
         }
-        /* equivalent to
+        /* approximately equivalent to
         maven {
             url = "https://maven.auoeke.net"
 
