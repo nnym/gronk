@@ -4,7 +4,7 @@ import java.util.HashSet;
 import org.gradle.api.Project;
 
 public class GronkExtension {
-    public String fallbackVersion = "+";
+    public String fallbackVersion = "latest.release";
     public String url;
 
     private final Project project;

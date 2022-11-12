@@ -9,7 +9,7 @@ This Gradle project plugin
   - allows URL to be specified as the first argument to `RepositoryHandler::maven`
   - allows leading `https://` to be omitted
   - adds extension closures `username` and `password` mapped to `PasswordCredentials::set{Username,Password}`
-- sets `+` as the preferred (fallback) version for dependencies that do not have a version specified
+- sets `latest.release` as the required (fallback) version for dependencies that do not have a version specified
 - applies `JavaPluginExtension::withSourcesJar` when the Java plugin is present
 - adds a default Maven publication to an empty publication container from the Java software component
 - adds extension `url` and fills in the POM fields `name`, `description` and `url` in all Maven publications from the project

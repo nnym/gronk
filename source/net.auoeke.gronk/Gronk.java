@@ -60,7 +60,7 @@ public class Gronk implements Plugin<Project> {
         // Use the fallback (latest) version for dependencies without required versions.
         project.getConfigurations().all(configuration -> configuration.getDependencies().withType(ExternalDependency.class, dependency -> {
             if (dependency.getVersion() == null || dependency.getVersion().isEmpty()) {
-                dependency.version(constraint -> constraint.prefer(extension.fallbackVersion));
+                dependency.version(constraint -> constraint.require(extension.fallbackVersion));
             }
         }));
 
