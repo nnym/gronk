@@ -1,9 +1,9 @@
 package net.auoeke.gronk;
 
 public class ManifestMerger extends ManifestMergerExtension {
-    public ManifestMerger() {
-        super(null);
+	public ManifestMerger() {
+		super(null);
 
-        this.configured = true;
-    }
+		this.configured = true;
+	}
 }

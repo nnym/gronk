@@ -1,32 +1,32 @@
 plugins {
-    id("groovy")
-    id("net.auoeke.gronk")
+	id("groovy")
+	id("net.auoeke.gronk")
 }
 
 group = "net.example"
 version = "1.2.3"
 
 sourceSets {
-    main {
-        relocate {
-            includeUnder("tlp")
-            to("")
-        }
+	main {
+		relocate {
+			includeUnder("tlp")
+			to("")
+		}
 
-        relocate {
-            includeUnder("sub/net")
-            excludeUnder("sub/net/work")
-            to = "subnet"
-        }
+		relocate {
+			includeUnder("sub/net")
+			excludeUnder("sub/net/work")
+			to = "subnet"
+		}
 
-        relocate {
+		relocate {
 
-        }
+		}
 
-        groovy.srcDir("src")
-    }
+		groovy.srcDir("src")
+	}
 }
 
 dependencies {
-    implementation(localGroovy())
+	implementation(localGroovy())
 }

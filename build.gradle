@@ -1,7 +1,7 @@
 plugins {
-    id("signing")
-    id("com.gradle.plugin-publish").version("latest.release")
-    id("net.auoeke.gronk").version("latest.release")
+	id("signing")
+	id("com.gradle.plugin-publish").version("latest.release")
+	id("net.auoeke.gronk").version("latest.release")
 }
 
 group("net.auoeke")
@@ -9,11 +9,11 @@ version("3.1.0")
 javaVersion(17)
 
 gronk {
-    uncheck()
+	uncheck()
 }
 
 repositories {
-    gradlePluginPortal()
+	gradlePluginPortal()
 }
 
 dependencies {
@@ -21,38 +21,38 @@ dependencies {
 	compileOnly("net.auoeke:dycon-javac")
 	compileOnly("net.auoeke:dycon")
 	implementation("net.auoeke:reflect")
-    // Ideally would be compileOnly but then Gradle does not allow gronk to access Shadow's classes.
-    implementation("gradle.plugin.com.github.johnrengelman:shadow")
+	// Ideally would be compileOnly but then Gradle does not allow gronk to access Shadow's classes.
+	implementation("gradle.plugin.com.github.johnrengelman:shadow")
 
-    testImplementation(
-        "org.codehaus.groovy:groovy-nio",
-        "org.ow2.asm:asm",
-        "org.ow2.asm:asm-tree",
-        "org.junit.jupiter:junit-jupiter-api",
-        "org.junit.jupiter:junit-jupiter-params"
-    )
-    testCompileOnly("org.jetbrains:annotations")
-    testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine")
+	testImplementation(
+		"org.codehaus.groovy:groovy-nio",
+		"org.ow2.asm:asm",
+		"org.ow2.asm:asm-tree",
+		"org.junit.jupiter:junit-jupiter-api",
+		"org.junit.jupiter:junit-jupiter-params"
+	)
+	testCompileOnly("org.jetbrains:annotations")
+	testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine")
 }
 
 pluginBundle {
-    website = "https://github.com/auoeke/gronk"
-    vcsUrl = "https://github.com/auoeke/gronk"
-    tags = ["condense"]
+	website = "https://github.com/auoeke/gronk"
+	vcsUrl = "https://github.com/auoeke/gronk"
+	tags = ["condense"]
 }
 
 gradlePlugin {
-    plugins {
-        gronk {
-            id = "net.auoeke.gronk"
-            implementationClass = "net.auoeke.gronk.Gronk"
-            displayName = name
-            description = "a Gradle plugin that simplifies build scripts by factoring out common elements"
-        }
-    }
+	plugins {
+		gronk {
+			id = "net.auoeke.gronk"
+			implementationClass = "net.auoeke.gronk.Gronk"
+			displayName = name
+			description = "a Gradle plugin that simplifies build scripts by factoring out common elements"
+		}
+	}
 }
 
 test {
-    dependsOn(cleanTest, pluginUnderTestMetadata)
-    useJUnitPlatform()
+	dependsOn(cleanTest, pluginUnderTestMetadata)
+	useJUnitPlatform()
 }

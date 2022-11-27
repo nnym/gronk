@@ -1,8 +1,8 @@
 plugins {
-    id("net.auoeke.gronk")
+	id("net.auoeke.gronk")
 }
 
 repositories {
-    mavenCentral()
-    maven("maven.auoeke.net")
+	mavenCentral()
+	maven("maven.auoeke.net")
 }

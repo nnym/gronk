@@ -4,6 +4,6 @@ import groovy.transform.CompileStatic
 
 @CompileStatic
 class Details {
-    public Type type
-    public String to
+	public Type type
+	public String to
 }

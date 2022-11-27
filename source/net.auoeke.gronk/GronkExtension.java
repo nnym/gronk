@@ -16,71 +16,71 @@ import org.gradle.external.javadoc.internal.JavadocOptionFile;
 import static net.auoeke.dycon.Dycon.*;
 
 public class GronkExtension {
-    public String fallbackVersion = "latest.release";
-    public String url;
+	public String fallbackVersion = "latest.release";
+	public String url;
 
-    private final Project project;
+	private final Project project;
 
-    public GronkExtension(Project project) {
-        this.project = project;
-    }
+	public GronkExtension(Project project) {
+		this.project = project;
+	}
 
-    public void url(String url) {
-        this.url = url;
-    }
+	public void url(String url) {
+		this.url = url;
+	}
 
-    public void fallbackVersion(String version) {
-        this.fallbackVersion = version;
-    }
+	public void fallbackVersion(String version) {
+		this.fallbackVersion = version;
+	}
 
-    public void javaVersion(Object version) {
-        Util.javaExtension(this.project, extension -> {
-            extension.setSourceCompatibility(version);
-            extension.setTargetCompatibility(version);
-        });
-    }
+	public void javaVersion(Object version) {
+		Util.javaExtension(this.project, extension -> {
+			extension.setSourceCompatibility(version);
+			extension.setTargetCompatibility(version);
+		});
+	}
 
-    public void uncheck() {
-        this.project.afterEvaluate(project -> Util.javaExtension(project, java -> {
-            var names = new HashSet<>();
-            project.getConfigurations().all(configuration -> names.add(configuration.getName()));
-            project.getRepositories().mavenCentral();
+	public void uncheck() {
+		this.project.afterEvaluate(project -> Util.javaExtension(project, java -> {
+			var names = new HashSet<>();
+			project.getConfigurations().all(configuration -> names.add(configuration.getName()));
+			project.getRepositories().mavenCentral();
 
-            java.getSourceSets()
-                .matching(set -> names.contains(set.getAnnotationProcessorConfigurationName()))
-                .all(set -> project.getDependencies().add(set.getAnnotationProcessorConfigurationName(), "net.auoeke:uncheck"));
-        }));
-    }
+			java.getSourceSets()
+				.matching(set -> names.contains(set.getAnnotationProcessorConfigurationName()))
+				.all(set -> project.getDependencies().add(set.getAnnotationProcessorConfigurationName(), "net.auoeke:uncheck"));
+		}));
+	}
 
-    public void export(SourceSet set, String modulePackage, String otherModule) {
-        if (otherModule == null) {
-            otherModule = "ALL-UNNAMED";
-        }
+	public void export(SourceSet set, String modulePackage, String otherModule) {
+		if (otherModule == null) {
+			otherModule = "ALL-UNNAMED";
+		}
 
-        var compileJava = set.getCompileJavaTaskName();
-        var value = modulePackage + '=' + otherModule;
+		var compileJava = set.getCompileJavaTaskName();
+		var value = modulePackage + '=' + otherModule;
 
-        this.project.getTasks().matching(task -> task.getName().equals(compileJava)).all(task -> {
-            var arguments = ((JavaCompile) task).getOptions().getCompilerArgs();
-            arguments.add("--add-exports");
-            arguments.add(value);
-        });
+		this.project.getTasks().matching(task -> task.getName().equals(compileJava)).all(task -> {
+			var arguments = ((JavaCompile) task).getOptions().getCompilerArgs();
+			arguments.add("--add-exports");
+			arguments.add(value);
+		});
 
-        var javadoc = set.getJavadocTaskName();
+		var javadoc = set.getJavadocTaskName();
 
-        this.project.getTasks().matching(task -> task.getName().equals(javadoc)).all(task -> {
-            var options = (CoreJavadocOptions) ((Javadoc) task).getOptions();
-            var optionFile = ldc(() -> Pointer.of(CoreJavadocOptions.class, "optionFile")).<JavadocOptionFile>getT(options);
-            var optionMap = Classes.<Map<String, JavadocOptionFileOption<List<String>>>>cast(optionFile.getOptions());
+		this.project.getTasks().matching(task -> task.getName().equals(javadoc)).all(task -> {
+			var options = (CoreJavadocOptions) ((Javadoc) task).getOptions();
+			var optionFile = ldc(() -> Pointer.of(CoreJavadocOptions.class, "optionFile")).<JavadocOptionFile>getT(options);
+			var optionMap = Classes.<Map<String, JavadocOptionFileOption<List<String>>>>cast(optionFile.getOptions());
 			var option = optionMap.get("-add-exports");
 
 			if (option == null) {
 				option = options.addMultilineStringsOption("-add-exports");
 			}
 
-            option.getValue().add(value);
-        });
-    }
+			option.getValue().add(value);
+		});
+	}
 
 	public void export(SourceSet set, String modulePackage) {
 		this.export(set, modulePackage, null);

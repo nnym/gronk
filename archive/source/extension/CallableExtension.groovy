@@ -6,26 +6,26 @@ import org.gradle.util.ConfigureUtil
 
 @CompileStatic
 abstract class CallableExtension extends Closure implements Configurable {
-    CallableExtension() {
-        super(null)
-    }
+	CallableExtension() {
+		super(null)
+	}
 
-    protected static <V> V configure(Object object, Closure<V> closure) {
-        return ConfigureUtil.configureSelf(closure, object) as V
-    }
+	protected static <V> V configure(Object object, Closure<V> closure) {
+		return ConfigureUtil.configureSelf(closure, object) as V
+	}
 
-    @Override
-    def getProperty(String name) {this.metaClass.getProperty(this, name)}
+	@Override
+	def getProperty(String name) {this.metaClass.getProperty(this, name)}
 
-    @Override
-    void setProperty(String name, Object value) {this.metaClass.setProperty(this, name, value)}
+	@Override
+	void setProperty(String name, Object value) {this.metaClass.setProperty(this, name, value)}
 
-    @Override
-    Object configure(Closure closure) {
-        return configure(this, closure)
-    }
+	@Override
+	Object configure(Closure closure) {
+		return configure(this, closure)
+	}
 
-    final void doCall() {
-        this.call()
-    }
+	final void doCall() {
+		this.call()
+	}
 }

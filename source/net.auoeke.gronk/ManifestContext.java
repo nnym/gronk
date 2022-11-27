@@ -8,39 +8,39 @@ import com.github.jengelman.gradle.plugins.shadow.relocation.Relocator;
 import org.gradle.api.file.FileTreeElement;
 
 public final class ManifestContext {
-    public final FileTreeElement file;
-    public final Manifest manifest;
-    public final List<Relocator> relocators;
-    public final ShadowStats stats;
+	public final FileTreeElement file;
+	public final Manifest manifest;
+	public final List<Relocator> relocators;
+	public final ShadowStats stats;
 
-    public ManifestContext(FileTreeElement file, Manifest manifest, List<Relocator> relocators, ShadowStats stats) {
-        this.file = file;
-        this.manifest = manifest;
-        this.relocators = relocators;
-        this.stats = stats;
-    }
+	public ManifestContext(FileTreeElement file, Manifest manifest, List<Relocator> relocators, ShadowStats stats) {
+		this.file = file;
+		this.manifest = manifest;
+		this.relocators = relocators;
+		this.stats = stats;
+	}
 
-    public FileTreeElement getFile() {
-        return this.file;
-    }
+	public FileTreeElement getFile() {
+		return this.file;
+	}
 
-    public Manifest getManifest() {
-        return this.manifest;
-    }
+	public Manifest getManifest() {
+		return this.manifest;
+	}
 
-    public List<Relocator> getRelocators() {
-        return this.relocators;
-    }
+	public List<Relocator> getRelocators() {
+		return this.relocators;
+	}
 
-    public ShadowStats getStats() {
-        return this.stats;
-    }
+	public ShadowStats getStats() {
+		return this.stats;
+	}
 
-    public boolean hasAttribute(String key, String value) {
-        return Objects.equals(this.manifest.getMainAttributes().getValue(key), value);
-    }
+	public boolean hasAttribute(String key, String value) {
+		return Objects.equals(this.manifest.getMainAttributes().getValue(key), value);
+	}
 
-    public boolean hasAttribute(String key) {
-        return this.manifest.getMainAttributes().getValue(key) != null;
-    }
+	public boolean hasAttribute(String key) {
+		return this.manifest.getMainAttributes().getValue(key) != null;
+	}
 }

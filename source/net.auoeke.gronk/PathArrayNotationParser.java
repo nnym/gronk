@@ -14,8 +14,8 @@ public class PathArrayNotationParser implements NotationParser<Object, Object> {
 
 	@Override public Object parseNotation(Object notation) throws TypeConversionException {
 		var stream = notation instanceof Object[] array ? Stream.of(array)
-			 	  : notation instanceof Collection<?> collection ? collection.stream()
-				  : null;
+			: notation instanceof Collection<?> collection ? collection.stream()
+			: null;
 
 		if (stream == null) {
 			return this.parent.parseNotation(notation);

@@ -1,9 +1,9 @@
 plugins {
-    id("java")
-    id("maven-publish")
-    id("signing")
-    id("net.auoeke.gronk")
-    id("com.github.johnrengelman.shadow").version("latest.release")
+	id("java")
+	id("maven-publish")
+	id("signing")
+	id("net.auoeke.gronk")
+	id("com.github.johnrengelman.shadow").version("latest.release")
 }
 
 group("net.auoeke.gronk.test")
@@ -16,9 +16,9 @@ targetCompatibility = 17
 */
 
 gronk {
-    // Add net.auoeke:uncheck to every annotation processor configuration.
-    // Add Central Repository.
-    uncheck()
+	// Add net.auoeke:uncheck to every annotation processor configuration.
+	// Add Central Repository.
+	uncheck()
 	export(sourceSets.main, "jdk.compiler/com.sun.tools.javac.api")
 }
 
@@ -29,27 +29,27 @@ sourceSets {
 }
 
 repositories {
-    maven("storage.googleapis.com/devan-maven")
-    /* approximately equivalent to
-    maven {url = name = "https://storage.googleapis.com/devan-maven"}
-    */
+	maven("storage.googleapis.com/devan-maven")
+	/* approximately equivalent to
+	maven {url = name = "https://storage.googleapis.com/devan-maven"}
+	*/
 }
 
 dependencies {
-    implementation("net.auoeke:reflect")
-    /* equivalent to
-    implementation("net.auoeke:reflect") {
-        version {
-            prefer("+")
-        }
-    }
-    */
+	implementation("net.auoeke:reflect")
+	/* equivalent to
+	implementation("net.auoeke:reflect") {
+		version {
+			prefer("+")
+		}
+	}
+	*/
 }
 
 shadowJar {
-    mergeManifests {
-        include {manifest.mainAttributes.getValue("Agent-Class")?.startsWith("net.auoeke.reflect")}
-    }
+	mergeManifests {
+		include {manifest.mainAttributes.getValue("Agent-Class")?.startsWith("net.auoeke.reflect")}
+	}
 }
 
 if (file([buildDir, "gronkTest"]) != new File(buildDir, "gronkTest")) {
@@ -57,38 +57,38 @@ if (file([buildDir, "gronkTest"]) != new File(buildDir, "gronkTest")) {
 }
 
 publishing {
-    repositories {
-        maven(findProperty("maven.repository")) {
-            username(findProperty("maven.username"))
-            password(findProperty("maven.password"))
-        }
-        /* approximately equivalent to
-        maven {
-            url = "https://maven.auoeke.net"
+	repositories {
+		maven(findProperty("maven.repository")) {
+			username(findProperty("maven.username"))
+			password(findProperty("maven.password"))
+		}
+		/* approximately equivalent to
+		maven {
+			url = "https://maven.auoeke.net"
 
-            credentials {
-                username = findProperty("maven.username")
-                password = findProperty("maven.password")
-            }
-        }
-        */
-    }
+			credentials {
+				username = findProperty("maven.username")
+				password = findProperty("maven.password")
+			}
+		}
+		*/
+	}
 
-/* implicit
-    publications {
-        maven(MavenPublication) {
-            from(components.java)
-        }
+	/* implicit
+		publications {
+			maven(MavenPublication) {
+				from(components.java)
+			}
 
-        withType(MavenPublication) {
-            versionMapping {
-                allVariants {
-                    fromResolutionResult()
-                }
-            }
+			withType(MavenPublication) {
+				versionMapping {
+					allVariants {
+						fromResolutionResult()
+					}
+				}
 
-            signing.sign(it)
-        }
-    }
-*/
+				signing.sign(it)
+			}
+		}
+	*/
 }

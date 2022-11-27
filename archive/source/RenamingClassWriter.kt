@@ -17,7 +17,7 @@ class RenamingClassWriter(private val name: String) : ClassVisitor(Opcodes.ASM9,
     }
 
     @Override
-    override fun visitSource(source: String, debug: String ) {
+    override fun visitSource(source: String, debug: String) {
         super.visitSource(source, debug)
     }
 }

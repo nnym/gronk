@@ -4,7 +4,7 @@ import groovy.transform.CompileStatic
 
 @CompileStatic
 enum Type {
-    EXCLUDE,
-    INCLUDE,
-    FLATTEN
+	EXCLUDE,
+	INCLUDE,
+	FLATTEN
 }

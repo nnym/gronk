@@ -5,9 +5,9 @@ import org.gradle.api.Project
 
 @CompileStatic
 class Extension {
-    private final Project project
+	private final Project project
 
-    Extension(Project project) {
-        this.project = project
-    }
+	Extension(Project project) {
+		this.project = project
+	}
 }

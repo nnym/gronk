@@ -1,12 +1,12 @@
 plugins {
-    id("java")
-    id("net.auoeke.gronk")
+	id("java")
+	id("net.auoeke.gronk")
 }
 
 javaVersion(17)
 
 gronk {
-    uncheck()
+	uncheck()
 	export(sourceSets.main, "jdk.compiler/com.sun.tools.javac.api")
 }
 

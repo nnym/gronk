@@ -60,7 +60,8 @@ internal class Gronk : Plugin<Project> {
 
                                         try {
                                             file.parent.delete()
-                                        } catch (ignored1: DirectoryNotEmptyException) {}
+                                        } catch (ignored1: DirectoryNotEmptyException) {
+                                        }
                                     }
                                 }
                             }

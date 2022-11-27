@@ -1,4 +1,5 @@
 This Gradle project plugin
+
 - adds extension `gronk`
 - adds extension `javaVersion` that sets `sourceCompatibility` and `targetCompatibility`
 - adds extension `systemProperty` that does what it purports to do
