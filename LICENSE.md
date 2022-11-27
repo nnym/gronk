@@ -1,4 +1,4 @@
-Copyright 2022 auoeke
+Copyright 2022 auoeke \<tjmnkrajyej at gmail dot com>
 
 Anybody may use any form of this software without restriction subject to the following term:
 - the software shall be used for Good; not Evil.
