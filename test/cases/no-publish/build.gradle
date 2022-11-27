@@ -7,13 +7,32 @@ javaVersion(17)
 
 gronk {
     uncheck()
+	export(sourceSets.main, "jdk.compiler/com.sun.tools.javac.api")
+}
+
+sourceSets {
+	main {
+		export("jdk.compiler/com.sun.tools.javac.tree")
+	}
 }
 
 repositories {
-    mavenCentral()
+	mavenCentral()
 }
 
 dependencies {
-    implementation("net.auoeke:reflect")
-    annotationProcessor("org.ow2.asm:asm-tree", "net.bytebuddy:byte-buddy-agent", "net.auoeke:reflect")
+	implementation("net.auoeke:reflect")
+	annotationProcessor("org.ow2.asm:asm-tree", "net.bytebuddy:byte-buddy-agent", "net.auoeke:reflect")
+}
+
+java {
+	withJavadocJar()
+}
+
+compileJava {
+	assert options.compilerArgs.findAll {it == "--add-exports"}.size() == 2
+}
+
+javadoc {
+	assert options.optionFile.options["-add-exports"].value.size() == 2
 }

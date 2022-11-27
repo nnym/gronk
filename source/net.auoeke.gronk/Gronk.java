@@ -5,7 +5,9 @@ import java.util.List;
 import java.util.Optional;
 import java.util.function.Consumer;
 import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar;
+import groovy.lang.Closure;
 import net.auoeke.reflect.Accessor;
+import net.auoeke.reflect.Invoker;
 import org.gradle.api.NamedDomainObjectCollection;
 import org.gradle.api.Plugin;
 import org.gradle.api.Project;
@@ -15,12 +17,13 @@ import org.gradle.api.plugins.JavaPluginExtension;
 import org.gradle.api.publish.PublishingExtension;
 import org.gradle.api.publish.VariantVersionMappingStrategy;
 import org.gradle.api.publish.maven.MavenPublication;
+import org.gradle.api.tasks.SourceSet;
 import org.gradle.jvm.tasks.Jar;
 import org.gradle.plugins.signing.SigningExtension;
 
 public class Gronk implements Plugin<Project> {
     @Override public void apply(Project project) {
-	    Accessor.putReference(((DefaultProject) project).getFileResolver(), "fileNotationParser", new PathArrayNotationParser());
+        Accessor.putReference(((DefaultProject) project).getFileResolver(), "fileNotationParser", new PathArrayNotationParser());
 
         // Add the main extension.
         var extension = project.getExtensions().create("gronk", GronkExtension.class, project);
@@ -41,7 +44,12 @@ public class Gronk implements Plugin<Project> {
             test.setSrcDirs(List.of(project.file("test/source").exists() ? "test/source" : "test"));
 
             var sourcesJarNames = new HashSet<String>();
-            java.getSourceSets().all(set -> sourcesJarNames.add(set.getSourcesJarTaskName()));
+	        var export = Invoker.bind(extension, "export", void.class, SourceSet.class, String.class, String.class);
+
+	        sets.all(set -> {
+	            Util.tryAddExtension(set, "export", Util.closure(export.bindTo(set)));
+				sourcesJarNames.add(set.getSourcesJarTaskName());
+			});
 
             project.getTasks()
                 .withType(Jar.class)

@@ -19,6 +19,13 @@ gronk {
     // Add net.auoeke:uncheck to every annotation processor configuration.
     // Add Central Repository.
     uncheck()
+	export(sourceSets.main, "jdk.compiler/com.sun.tools.javac.api")
+}
+
+sourceSets {
+	main {
+		export("jdk.compiler/com.sun.tools.javac.tree")
+	}
 }
 
 repositories {

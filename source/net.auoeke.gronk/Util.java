@@ -1,11 +1,15 @@
 package net.auoeke.gronk;
 
+import java.lang.invoke.MethodHandle;
+import java.util.Arrays;
 import java.util.Optional;
 import java.util.concurrent.Callable;
 import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.regex.Pattern;
 import groovy.lang.Closure;
+import net.auoeke.reflect.Invoker;
+import net.auoeke.reflect.Methods;
 import org.gradle.api.Action;
 import org.gradle.api.Plugin;
 import org.gradle.api.Project;
@@ -76,20 +80,29 @@ public class Util {
     }
 
     public static <T> Closure actionClosure(Action<T> action) {
-        return new Closure(action) {
-            @SuppressWarnings("unused")
-            public void doCall(T object) {
-                action.execute(object);
-            }
-        };
+		return closure(action);
     }
 
     public static <T, R> Closure functionClosure(Function<T, R> function) {
-        return new Closure(function) {
-            @SuppressWarnings("unused")
-            public R doCall(T object) {
-                return function.apply(object);
-            }
-        };
+		return closure(function);
     }
+
+	public static Closure closure(MethodHandle method) {
+		return new Closure(method) {
+			public Object doCall(Object argument) {
+				return this.doCall(new Object[]{argument});
+			}
+
+			@SuppressWarnings("unused")
+			public Object doCall(Object... arguments) {
+				var arity = method.type().parameterCount();
+				System.out.println(Arrays.toString(arguments));
+				return method.invokeWithArguments(arguments.length >= arity ? arguments : Arrays.copyOf(arguments, arity));
+			}
+		};
+	}
+
+	private static Closure closure(Object lambda) {
+		return closure(Invoker.unreflect(Methods.sam(lambda.getClass())).bindTo(lambda));
+	}
 }

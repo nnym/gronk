@@ -5,7 +5,7 @@ plugins {
 }
 
 group("net.auoeke")
-version("3.0.0")
+version("3.1.0")
 javaVersion(17)
 
 gronk {
@@ -17,6 +17,9 @@ repositories {
 }
 
 dependencies {
+	annotationProcessor("net.auoeke:dycon-javac")
+	compileOnly("net.auoeke:dycon-javac")
+	compileOnly("net.auoeke:dycon")
 	implementation("net.auoeke:reflect")
     // Ideally would be compileOnly but then Gradle does not allow gronk to access Shadow's classes.
     implementation("gradle.plugin.com.github.johnrengelman:shadow")
