@@ -96,7 +96,6 @@ public class Util {
 			@SuppressWarnings("unused")
 			public Object doCall(Object... arguments) {
 				var arity = method.type().parameterCount();
-				System.out.println(Arrays.toString(arguments));
 				return method.invokeWithArguments(arguments.length >= arity ? arguments : Arrays.copyOf(arguments, arity));
 			}
 		};
