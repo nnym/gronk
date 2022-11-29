@@ -18,7 +18,6 @@ repositories {
 
 dependencies {
 	annotationProcessor("net.auoeke:dycon-javac")
-	compileOnly("net.auoeke:dycon-javac")
 	compileOnly("net.auoeke:dycon")
 	implementation("net.auoeke:reflect")
 	// Ideally would be compileOnly but then Gradle does not allow gronk to access Shadow's classes.
