@@ -2,8 +2,7 @@ package net.auoeke.gronk;
 
 import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
-import net.auoeke.reflect.Classes;
+import java.util.Objects;
 import net.auoeke.reflect.Pointer;
 import org.gradle.api.Project;
 import org.gradle.api.tasks.SourceSet;
@@ -71,13 +70,7 @@ public class GronkExtension {
 		this.project.getTasks().matching(task -> task.getName().equals(javadoc)).all(task -> {
 			var options = (CoreJavadocOptions) ((Javadoc) task).getOptions();
 			var optionFile = ldc(() -> Pointer.of(CoreJavadocOptions.class, "optionFile")).<JavadocOptionFile>getT(options);
-			var optionMap = Classes.<Map<String, JavadocOptionFileOption<List<String>>>>cast(optionFile.getOptions());
-			var option = optionMap.get("-add-exports");
-
-			if (option == null) {
-				option = options.addMultilineStringsOption("-add-exports");
-			}
-
+			var option = Objects.requireNonNullElseGet((JavadocOptionFileOption<List<String>>) optionFile.getOptions().get("-add-exports"), () -> options.addMultilineStringsOption("-add-exports"));
 			option.getValue().add(value);
 		});
 	}
