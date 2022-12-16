@@ -80,11 +80,11 @@ public class Util {
 	}
 
 	public static <T> Closure actionClosure(Action<T> action) {
-		return closure(action);
+		return lambdaClosure(action);
 	}
 
 	public static <T, R> Closure functionClosure(Function<T, R> function) {
-		return closure(function);
+		return lambdaClosure(function);
 	}
 
 	public static Closure closure(MethodHandle method) {
@@ -101,7 +101,7 @@ public class Util {
 		};
 	}
 
-	private static Closure closure(Object lambda) {
+	private static Closure lambdaClosure(Object lambda) {
 		return closure(Invoker.unreflect(Methods.sam(lambda.getClass())).bindTo(lambda));
 	}
 }

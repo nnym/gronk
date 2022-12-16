@@ -1,22 +1,23 @@
 package net.auoeke.gronk;
 
-import java.util.HashSet;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.Consumer;
 import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar;
 import net.auoeke.reflect.Accessor;
-import net.auoeke.reflect.Invoker;
+import org.codehaus.groovy.runtime.DefaultGroovyMethods;
+import org.codehaus.groovy.runtime.InvokerHelper;
 import org.gradle.api.NamedDomainObjectCollection;
 import org.gradle.api.Plugin;
 import org.gradle.api.Project;
 import org.gradle.api.artifacts.ExternalDependency;
 import org.gradle.api.internal.project.DefaultProject;
 import org.gradle.api.plugins.JavaPluginExtension;
+import org.gradle.api.provider.Property;
 import org.gradle.api.publish.PublishingExtension;
 import org.gradle.api.publish.VariantVersionMappingStrategy;
 import org.gradle.api.publish.maven.MavenPublication;
-import org.gradle.api.tasks.SourceSet;
 import org.gradle.jvm.tasks.Jar;
 import org.gradle.plugins.signing.SigningExtension;
 
@@ -42,18 +43,17 @@ public class Gronk implements Plugin<Project> {
 			var test = sets.getByName("test").getJava();
 			test.setSrcDirs(List.of(project.file("test/source").exists() ? "test/source" : "test"));
 
-			var sourcesJarNames = new HashSet<String>();
-			var export = Invoker.bind(extension, "export", void.class, SourceSet.class, String.class, String.class);
-
 			sets.all(set -> {
-				Util.tryAddExtension(set, "export", Util.closure(export.bindTo(set)));
-				sourcesJarNames.add(set.getSourcesJarTaskName());
-			});
+				// Add extension `export` to source sets.
+				Util.tryAddExtension(set, "export", Util.functionClosure(arguments ->
+					InvokerHelper.invokeMethod(extension, "export", DefaultGroovyMethods.plus(new Object[]{set}, InvokerHelper.asArray(arguments)))
+				));
 
-			project.getTasks()
-				.withType(Jar.class)
-				.matching(task -> sourcesJarNames.contains(task.getName()))
-				.all(task -> task.eachFile(file -> file.setPath(file.getPath().replaceAll("\\.(?=.*/)", "/"))));
+				project.getTasks()
+					.withType(Jar.class)
+					.matching(task -> task.getName().equals(set.getSourcesJarTaskName()))
+					.all(task -> task.eachFile(file -> file.setPath(file.getPath().replaceAll("\\.(?=.*/)", "/"))));
+			});
 
 			Util.whenPluginPresent(project, "com.github.johnrengelman.shadow", plugin -> {
 				project.getTasks().withType(ShadowJar.class, ManifestMergerExtension::inject);
@@ -78,7 +78,7 @@ public class Gronk implements Plugin<Project> {
 			// Add the Maven repository extension.
 			MavenRepositoryExtension.inject(project, publish.getRepositories());
 
-			project.afterEvaluate(p -> p.getPluginManager().withPlugin("maven-publish", plugin -> publish.publications(publications -> {
+			project.afterEvaluate(p -> publish.publications(publications -> {
 				// Ensure that a publication exists if the Maven publishing plugin is applied and the group is not empty.
 				if (publications.isEmpty() && !project.getGroup().toString().isEmpty()) {
 					publications.register("maven", MavenPublication.class, pub -> configure(project.getComponents(), "java", pub::from));
@@ -95,21 +95,19 @@ public class Gronk implements Plugin<Project> {
 
 					// Fill in some POM fields from the project.
 					publication.pom(pom -> {
-						if (!pom.getName().isPresent()) {
-							pom.getName().set(project.getName());
-						}
-
-						if (!pom.getDescription().isPresent()) {
-							pom.getDescription().set(project.getDescription());
-						}
-
-						if (!pom.getUrl().isPresent()) {
-							pom.getUrl().set(extension.url);
-						}
+						fallback(pom.getName(), project.getName());
+						fallback(pom.getDescription(), project.getDescription());
+						fallback(pom.getUrl(), extension.url);
 					});
 				});
-			})));
+			}));
 		});
+	}
+
+	private static <T> void fallback(Property<T> property, T value) {
+		if (!property.isPresent()) {
+			property.set(value);
+		}
 	}
 
 	private static <T> void configure(NamedDomainObjectCollection<T> collection, String name, Consumer<T> configure) {

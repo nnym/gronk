@@ -5,6 +5,8 @@ plugins {
 
 javaVersion(17)
 
+final exports = com.sun.source.util.Plugin.class.module.packages.collect {"jdk.compiler/" + it}
+
 gronk {
 	uncheck()
 	export(sourceSets.main, "jdk.compiler/com.sun.tools.javac.api")
@@ -13,6 +15,7 @@ gronk {
 sourceSets {
 	main {
 		export("jdk.compiler/com.sun.tools.javac.tree")
+		export(exports)
 	}
 }
 
@@ -30,9 +33,9 @@ java {
 }
 
 compileJava {
-	assert options.compilerArgs.findAll {it == "--add-exports"}.size() == 2
+	assert options.compilerArgs.findAll {it == "--add-exports"}.size() == 2 + exports.size()
 }
 
 javadoc {
-	assert options.optionFile.options["-add-exports"].value.size() == 2
+	assert options.optionFile.options["-add-exports"].value.size() == 2 + exports.size()
 }
