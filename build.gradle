@@ -25,7 +25,6 @@ dependencies {
 
 	testImplementation(
 		"org.codehaus.groovy:groovy-nio",
-		"org.ow2.asm:asm",
 		"org.ow2.asm:asm-tree",
 		"org.junit.jupiter:junit-jupiter-api",
 		"org.junit.jupiter:junit-jupiter-params"
@@ -35,8 +34,7 @@ dependencies {
 }
 
 pluginBundle {
-	website = "https://github.com/auoeke/gronk"
-	vcsUrl = "https://github.com/auoeke/gronk"
+	vcsUrl = website = "https://github.com/auoeke/gronk"
 	tags = ["condense"]
 }
 
@@ -44,9 +42,9 @@ gradlePlugin {
 	plugins {
 		gronk {
 			id = "net.auoeke.gronk"
-			implementationClass = "net.auoeke.gronk.Gronk"
 			displayName = name
 			description = "a Gradle plugin that simplifies build scripts by factoring out common elements"
+			implementationClass = "net.auoeke.gronk.Gronk"
 		}
 	}
 }
