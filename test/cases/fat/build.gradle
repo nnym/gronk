@@ -1,6 +1,5 @@
 plugins {
 	id("java")
-	id("maven-publish")
 	id("signing")
 	id("net.auoeke.gronk")
 	id("com.github.johnrengelman.shadow").version("latest.release")
@@ -8,18 +7,28 @@ plugins {
 
 group("net.auoeke.gronk.test")
 description("gronk fat test project")
-url("https://github.com/auoeke/gronk/tree/master/test/cases/fat")
 javaVersion(17)
 /* equivalent to
 sourceCompatibility = 17
 targetCompatibility = 17
 */
 
+println gronk.class.protectionDomain.codeSource.location
+
 gronk {
 	// Add net.auoeke:uncheck to every annotation processor configuration.
 	// Add Central Repository.
 	uncheck()
 	export(sourceSets.main, "jdk.compiler/com.sun.tools.javac.api")
+
+	// Applies maven-publish.
+	// mavenLocal() and maven with findProperty("maven.{repository,username,password}")
+	// Adds group, name, description, url, scm: {url: scm}, licenses: {license: {url: license}} and developers: {developer: {email}} to every Maven publication.
+	publish {
+		scm = "https://github.com/auoeke/gronk/tree/master/test/cases/fat"
+		license = "https://github.com/auoeke/gronk/blob/master/LICENSE.md"
+		email = "tjmnkrajyej@gmail.com"
+	}
 }
 
 sourceSets {
@@ -58,10 +67,10 @@ if (file([buildDir, "gronkTest"]) != new File(buildDir, "gronkTest")) {
 
 publishing {
 	repositories {
-		maven(findProperty("maven.repository")) {
-			username(findProperty("maven.username"))
-			password(findProperty("maven.password"))
-		}
+		// maven(findProperty("maven.repository")) {
+		// 	username(findProperty("maven.username"))
+		// 	password(findProperty("maven.password"))
+		// }
 		/* approximately equivalent to
 		maven {
 			url = "https://maven.auoeke.net"

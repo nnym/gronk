@@ -4,28 +4,53 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
 import net.auoeke.reflect.Pointer;
+import org.gradle.api.Action;
 import org.gradle.api.Project;
+import org.gradle.api.plugins.ExtensionAware;
+import org.gradle.api.plugins.JavaPluginExtension;
+import org.gradle.api.plugins.PluginManager;
+import org.gradle.api.provider.Property;
+import org.gradle.api.publish.PublishingExtension;
+import org.gradle.api.publish.maven.MavenPublication;
+import org.gradle.api.publish.maven.plugins.MavenPublishPlugin;
 import org.gradle.api.tasks.SourceSet;
 import org.gradle.api.tasks.compile.JavaCompile;
 import org.gradle.api.tasks.javadoc.Javadoc;
 import org.gradle.external.javadoc.CoreJavadocOptions;
 import org.gradle.external.javadoc.JavadocOptionFileOption;
 import org.gradle.external.javadoc.internal.JavadocOptionFile;
+import org.gradle.plugins.signing.SigningPlugin;
 
 import static net.auoeke.dycon.Dycon.*;
 
 public class GronkExtension {
 	public String fallbackVersion = "latest.release";
-	public String url;
+
+	/*
+	url.set("https://github.com/auoeke/reflect")
+
+	licenses {
+		license {
+			url.set("https://github.com/auoeke/reflect/blob/master/LICENSE.md")
+		}
+	}
+
+	developers {
+		developer {
+			email.set("tjmnkrajyej@gmail.com")
+		}
+	}
+
+	scm {
+		url.set("https://github.com/auoeke/reflect/tree/master")
+	}
+	*/
 
 	private final Project project;
+	private PublishingConfiguration publishing;
 
 	public GronkExtension(Project project) {
 		this.project = project;
-	}
-
-	public void url(String url) {
-		this.url = url;
 	}
 
 	public void fallbackVersion(String version) {
@@ -85,5 +110,57 @@ public class GronkExtension {
 
 	public void export(SourceSet set, Iterable<String> modulesPackages) {
 		modulesPackages.forEach(modulePackage -> this.export(set, modulePackage, null));
+	}
+
+	public void publish(Action<? super PublishingConfiguration> configure) {
+		if (this.publishing == null) {
+			this.publishing = new PublishingConfiguration();
+			var plugins = this.project.getPluginManager();
+			plugins.apply(MavenPublishPlugin.class);
+			plugins.apply(SigningPlugin.class);
+			Util.javaExtension(this.project, JavaPluginExtension::withJavadocJar);
+
+			this.project.afterEvaluate(project -> {
+				var extension = project.getExtensions().getByType(PublishingExtension.class);
+
+				// Fill in some POM fields from the project and the PublishingExtension.
+				extension.getPublications().withType(MavenPublication.class, publication -> publication.pom(pom -> {
+					fallback(pom.getName(), project.getName());
+					fallback(pom.getDescription(), project.getDescription());
+					fallback(pom.getUrl(), this.publishing.url());
+					add(this.publishing.license, value -> pom.licenses(licenses -> licenses.license(license -> license.getUrl().set(value))));
+					add(this.publishing.email, value -> pom.developers(developers -> developers.developer(developer -> developer.getEmail().set(value))));
+					add(this.publishing.scm, value -> pom.scm(scm -> scm.getUrl().set(value)));
+				}));
+
+				// Add default repositories.
+				var repositories = extension.getRepositories();
+				repositories.mavenLocal();
+
+				var url = this.project.findProperty("maven.repository");
+
+				if (url != null) {
+					((ExtensionAware) repositories).getExtensions().getByType(MavenRepositoryExtension.class).doCall(url)
+						.credentials(credentials -> {
+							credentials.setUsername((String) this.project.findProperty("maven.username"));
+							credentials.setPassword((String) this.project.findProperty("maven.password"));
+						});
+				}
+			});
+		}
+
+		this.project.configure(List.of(this.publishing), configure);
+	}
+
+	private static <T> void fallback(Property<T> property, T value) {
+		if (!property.isPresent()) {
+			property.set(value);
+		}
+	}
+
+	private static <T> void add(T value, Action<? super T> initializer) {
+		if (value != null) {
+			initializer.execute(value);
+		}
 	}
 }

@@ -1,6 +1,5 @@
 package net.auoeke.gronk;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.Consumer;
@@ -29,7 +28,6 @@ public class Gronk implements Plugin<Project> {
 		var extension = project.getExtensions().create("gronk", GronkExtension.class, project);
 
 		Util.tryAddExtension(project, "systemProperty", Util.<String, String>functionClosure(System::getProperty));
-		Util.tryAddExtension(project, "url", Util.actionClosure(extension::url));
 
 		Util.javaExtension(project, java -> {
 			// Add javaVersion to the project.
@@ -39,7 +37,7 @@ public class Gronk implements Plugin<Project> {
 			var sets = java.getSourceSets();
 			var main = sets.getByName("main");
 			main.getJava().srcDir("source");
-			main.resources(resources -> resources.srcDir("resources"));
+			main.getResources().srcDir("resources");
 			var test = sets.getByName("test").getJava();
 			test.setSrcDirs(List.of(project.file("test/source").exists() ? "test/source" : "test"));
 
@@ -92,22 +90,9 @@ public class Gronk implements Plugin<Project> {
 						// Sign publications if the signing plugin is applied.
 						Util.whenExtensionPresent(project, SigningExtension.class, signing -> signing.sign(publication));
 					}
-
-					// Fill in some POM fields from the project.
-					publication.pom(pom -> {
-						fallback(pom.getName(), project.getName());
-						fallback(pom.getDescription(), project.getDescription());
-						fallback(pom.getUrl(), extension.url);
-					});
 				});
 			}));
 		});
-	}
-
-	private static <T> void fallback(Property<T> property, T value) {
-		if (!property.isPresent()) {
-			property.set(value);
-		}
 	}
 
 	private static <T> void configure(NamedDomainObjectCollection<T> collection, String name, Consumer<T> configure) {
